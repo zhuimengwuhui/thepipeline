@@ -57,22 +57,22 @@ def make_pipeline(state):
         filter=suffix('.bam'),
         output='.sort.bam')
 
-    # # Mark duplicates in the BAM file using Picard
-    # pipeline.transform(
-    #     task_func=stages.mark_duplicates_picard,
-    #     name='mark_duplicates_picard',
-    #     input=output_from('sort_bam_picard'),
-    #     filter=suffix('.sort.bam'),
-    #     # XXX should make metricsup an extra output?
-    #     output=['.sort.dedup.bam', '.metricsdup'])
-    #
-    # # Generate chromosome intervals using GATK
-    # pipeline.transform(
-    #     task_func=stages.chrom_intervals_gatk,
-    #     name='chrom_intervals_gatk',
-    #     input=output_from('mark_duplicates_picard'),
-    #     filter=suffix('.sort.dedup.bam'),
-    #     output='.chr.intervals')
+    # Mark duplicates in the BAM file using Picard
+    pipeline.transform(
+        task_func=stages.mark_duplicates_picard,
+        name='mark_duplicates_picard',
+        input=output_from('sort_bam_picard'),
+        filter=suffix('.sort.bam'),
+        # XXX should make metricsup an extra output?
+        output=['.sort.dedup.bam', '.metricsdup'])
+
+    # Generate chromosome intervals using GATK
+    pipeline.transform(
+        task_func=stages.chrom_intervals_gatk,
+        name='chrom_intervals_gatk',
+        input=output_from('mark_duplicates_picard'),
+        filter=suffix('.sort.dedup.bam'),
+        output='.chr.intervals')
     #
     # # Local realignment using GATK
     # (pipeline.transform(
