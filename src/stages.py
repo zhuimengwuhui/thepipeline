@@ -68,6 +68,7 @@ class Stages(object):
         '''Align the paired end fastq files to the reference genome using bwa'''
         fastq_read1_in, fastq_read2_in = inputs
         cores = self.get_stage_options('align_bwa', 'cores')
+        safe_make_dir('"alignments/{sample}"'.format(sample=sample_id))
         read_group = '"@RG\tID:{readid}\tSM:{sample}\tPL:Illumina"' \
             .format(readid=read_id, sample=sample_id)
         command = 'bwa mem -t {cores} -R {read_group} {reference} {fastq_read1} {fastq_read2} ' \
