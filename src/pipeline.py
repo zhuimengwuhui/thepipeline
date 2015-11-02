@@ -38,6 +38,7 @@ def make_pipeline(state):
         #    1. The corresponding R2 FASTQ file
         # e.g. C2WPF.5_Solexa-201237_5_X4311_1.fastq.gz
         add_inputs=add_inputs('.+/(?P<readid>[a-zA-Z0-9]-\.+)_(?P<lib>[a-zA-Z0-9]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+)_2.fastq.gz'),
+        add_inputs=add_inputs('{path[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}_2.fastq.gz')
         # Add an "extra" argument to the state (beyond the inputs and outputs)
         # which is the sample name. This is needed within the stage for finding out
         # sample specific configuration options
