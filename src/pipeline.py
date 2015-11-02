@@ -41,9 +41,6 @@ def make_pipeline(state):
         # Add an "extra" argument to the state (beyond the inputs and outputs)
         # which is the sample name. This is needed within the stage for finding out
         # sample specific configuration options
-        readid=['{readid[0]}'],
-        lib=['{lib[0]}'],
-        lane=['{lane[0]}'],
         extras=['{readid[0]}', '{lib[0]}', '{lane[0]}', '{sample[0]}'],
         # The output file name is the sample name with a .bam extension.
         output='{path[0]}/alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.bam')
