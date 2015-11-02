@@ -78,7 +78,8 @@ class Config(object):
         # Test for required fields: defaults, stages, fastqs, pipeline_id
         check_required_field(config, filename, 'defaults')
         check_required_field(config, filename, 'stages')
-        check_required_field(config, filename, 'vcf')
+        # check_required_field(config, filename, 'vcf')
+        check_required_field(config, filename, 'fastqs')
         check_required_field(config, filename, 'pipeline_id')
 
 
