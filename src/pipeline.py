@@ -44,7 +44,7 @@ def make_pipeline(state):
         readid=['{readid[0]}'],
         lib=['{lib[0]}'],
         lane=['{lane[0]}'],
-        extras=['{sample[0]}'],
+        extras=['{readid[0]}', '{lib[0]}', '{lane[0]}', '{sample[0]}'],
         # The output file name is the sample name with a .bam extension.
         output='{path[0]}/alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.bam')
 
