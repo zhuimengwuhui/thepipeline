@@ -70,7 +70,7 @@ class Stages(object):
         cores = self.get_stage_options('align_bwa', 'cores')
         safe_make_dir('"alignments/{sample}"'.format(sample=sample_id))
         read_group = '"@RG\tID:{readid}\tPU:{lib}\tLN:{lane}\tSM:{sample}\tPL:Illumina"' \
-            .format(readid=read_id, lib=lib, lane=lane; sample=sample_id)
+            .format(readid=read_id, lib=lib, lane=lane, sample=sample_id)
         command = 'bwa mem -t {cores} -R {read_group} {reference} {fastq_read1} {fastq_read2} ' \
                   '| samtools view -b -h -o {bam} -' \
                   .format(cores=cores,
