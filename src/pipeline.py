@@ -74,7 +74,7 @@ def make_pipeline(state):
         output='.intervals')
 
     # Local realignment using GATK
-    (pipeline.transform(
+    pipeline.transform(
         task_func=stages.local_realignment_gatk,
         name='local_realignment_gatk',
         input=output_from('realigner_target_creator'),
@@ -84,7 +84,7 @@ def make_pipeline(state):
         add_inputs=add_inputs('alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.bam'),
         # output='{path[0]}/{sample[0]}.sort.dedup.realn.bam')
         output='{alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam')
-        .follows('mark_duplicates_picard'))
+        .follows('mark_duplicates_picard')
 
     # Base recalibration using GATK
     pipeline.transform(
