@@ -83,8 +83,8 @@ def make_pipeline(state):
         # add_inputs=add_inputs('{path[0]}/{sample[0]}.sort.dedup.bam'),
         add_inputs=add_inputs('alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.bam'),
         # output='{path[0]}/{sample[0]}.sort.dedup.realn.bam')
-        output='{alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam'))
-        .follows('mark_duplicates_picard')
+        output='{alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam')
+        .follows('mark_duplicates_picard'))
 
     # Base recalibration using GATK
     pipeline.transform(
@@ -95,7 +95,7 @@ def make_pipeline(state):
         output=['.recal_data.csv', '.count_cov.log'])
 
     # Print reads using GATK
-    pipeline.transform(
+    (pipeline.transform(
         task_func=stages.print_reads_gatk,
         name='print_reads_gatk',
         input=output_from('base_recalibration_gatk'),
@@ -104,8 +104,8 @@ def make_pipeline(state):
         add_inputs=add_inputs('{path[0]}/{sample[0]}.sort.dedup.realn.bam'),
         # add_inputs=add_inputs('alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam'),
         # output='{path[0]}/{sample[0]}.sort.dedup.realn.recal.bam')
-        output='{alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.recal.bam'),
-        .follows('local_realignment_gatk')
+        output='{alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.recal.bam')
+        .follows('local_realignment_gatk'))
     #
     # # Call variants using GATK
     # pipeline.transform(
