@@ -40,8 +40,8 @@ class Stages(object):
         self.hapmap = self.get_options('hapmap')
         self.interval_hg19 = self.get_options('interval_hg19')
         self.CEU_mergeGvcf = self.get_options('CEU_mergeGvcf')
-        self.GBR_mergeGvcf = self.get_options('GBR_mergeGvcf')
-        self.FIN_mergeGvcf = self.get_options('FIN_mergeGvcf')
+        # self.GBR_mergeGvcf = self.get_options('GBR_mergeGvcf')
+        # self.FIN_mergeGvcf = self.get_options('FIN_mergeGvcf')
 
     def run_picard(self, stage, args):
         mem = int(self.state.config.get_stage_options(stage, 'mem'))
