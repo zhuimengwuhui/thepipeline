@@ -77,13 +77,12 @@ def make_pipeline(state):
     (pipeline.transform(
         task_func=stages.local_realignment_gatk,
         name='local_realignment_gatk',
-        input=output_from('realigner_target_creator'),
+        input=output_from('chrom_intervals_gatk'),
         # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).chr.intervals'),
         filter=formatter('.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).intervals'),
         # add_inputs=add_inputs('{path[0]}/{sample[0]}.sort.dedup.bam'),
         add_inputs=add_inputs('alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.bam'),
-        # output='{path[0]}/{sample[0]}.sort.dedup.realn.bam')
-        output='{alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam')
+        output='alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam')
         .follows('mark_duplicates_picard'))
 
     # Base recalibration using GATK
