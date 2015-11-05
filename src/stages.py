@@ -64,8 +64,8 @@ class Stages(object):
         pass
 
 
-    # def align_bwa(self, inputs, bam_out, read_id, lib, lane, sample_id):
-    def align_bwa(self, inputs, bam_out, sample_id):
+    def align_bwa(self, inputs, bam_out, read_id, lib, lane, sample_id):
+    # def align_bwa(self, inputs, bam_out, sample_id):
         '''Align the paired end fastq files to the reference genome using bwa'''
         fastq_read1_in, fastq_read2_in = inputs
         cores = self.get_stage_options('align_bwa', 'cores')
