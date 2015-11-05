@@ -103,7 +103,7 @@ class Stages(object):
         self.run_picard('mark_duplicates_picard', picard_args)
 
 
-    def chrom_intervals_gatk(self, inputs, intervals_out):
+    def realigner_target_creator(self, inputs, intervals_out):
         '''Generate chromosome intervals using GATK'''
         bam_in, _metrics_dup = inputs
         cores = self.get_stage_options('chrom_intervals_gatk', 'cores')
