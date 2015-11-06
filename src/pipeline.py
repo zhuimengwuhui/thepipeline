@@ -23,6 +23,14 @@ def make_pipeline(state):
         name='original_fastqs',
         output=fastq_files)
 
+     # Run fastQC on the FASTQ files
+    pipeline.transform(
+        task_func=stages.fastqc,
+        name='fastqc',
+        input=output_from('original_fastqs'),
+        filter=suffix('.fastq.gz'),
+        output='_fastqc')
+
     # Align paired end reads in FASTQ to the reference producing a BAM file
     pipeline.transform(
         task_func=stages.align_bwa,
@@ -34,7 +42,7 @@ def make_pipeline(state):
         # characters.
         # filter=formatter('(?P<path>.+)/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+)_1.fastq.gz'),
         filter=formatter(
-            '.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+)_1.fastq.gz'),
+            '.+/(?P<readid>[a-zA-Z0-9-.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+)_1.fastq.gz'),
         # Add one more inputs to the stage:
         #    1. The corresponding R2 FASTQ file
         # e.g. C2WPF.5_Solexa-201237_5_X4311_1.fastq.gz
