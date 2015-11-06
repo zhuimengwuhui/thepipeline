@@ -23,13 +23,6 @@ def make_pipeline(state):
         name='original_fastqs',
         output=fastq_files)
 
-     # Run fastQC on the FASTQ files
-    pipeline.transform(
-        task_func=stages.fastqc,
-        name='fastqc',
-        input=output_from('original_fastqs'),
-        filter=suffix('.fastq.gz'),
-        output='_fastqc')
 
     # Align paired end reads in FASTQ to the reference producing a BAM file
     pipeline.transform(
