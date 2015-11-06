@@ -156,6 +156,17 @@ class Stages(object):
                             bam=bam_in, recal_csv=csv_in, out=bam_out)
         self.run_gatk('print_reads_gatk', gatk_args)
 
+    # Merge per lane bam into a single bam per sample
+    def merge_sample_bams(self, bam_files_in, bam_out):
+        '''Merge per lane bam into a merged bam file'''
+        bam_files = ' '.join(['--variant ' + bam for bam in bam_files_in])
+        picard_args = 'MergeSamFiles INPUT={bams_in} OUTPUT={merged_bam_out} ' \
+                      'VALIDATION_STRINGENCY=LENIENT ' \
+                      'MAX_RECORDS_IN_RAM=5000000 ASSUME_SORTED=True ' \
+                      'CREATE_INDEX=True'.format(bams_in=bam_files, merged_bam_out=bam_out)
+        self.run_picard('merge_sample_bams', picard_args)  
+
+
 
     def call_variants_gatk(self, bam_in, vcf_out):
         '''Call variants using GATK'''
