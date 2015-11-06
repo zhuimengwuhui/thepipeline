@@ -107,7 +107,7 @@ def make_pipeline(state):
         .follows('local_realignment_gatk'))
 
     # Merge lane bams to sample bams
-    pipeline.merge(
+    pipeline.collate(
         task_func=stages.merge_sample_bams,
         name='merge_sample_bams',
         filter=formatter('.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).sort.dedup.realn.recal.bam'),
