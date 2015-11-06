@@ -159,8 +159,8 @@ class Stages(object):
     # Merge per lane bam into a single bam per sample
     def merge_sample_bams(self, bam_files_in, bam_out):
         '''Merge per lane bam into a merged bam file'''
-        bam_files = ' '.join(['--variant ' + bam for bam in bam_files_in])
-        picard_args = 'MergeSamFiles INPUT={bams_in} OUTPUT={merged_bam_out} ' \
+        bam_files = ' '.join(['INPUT=' + bam for bam in bam_files_in])
+        picard_args = 'MergeSamFiles {bams_in} OUTPUT={merged_bam_out} ' \
                       'VALIDATION_STRINGENCY=LENIENT ' \
                       'MAX_RECORDS_IN_RAM=5000000 ASSUME_SORTED=True ' \
                       'CREATE_INDEX=True'.format(bams_in=bam_files, merged_bam_out=bam_out)
