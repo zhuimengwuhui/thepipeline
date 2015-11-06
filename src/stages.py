@@ -61,6 +61,7 @@ class Stages(object):
 
     def original_fastqs(self, output):
         '''Original fastq files'''
+        print output
         pass
 
     def align_bwa(self, inputs, bam_out, read_id, lib, lane, sample_id):
