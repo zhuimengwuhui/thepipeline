@@ -32,13 +32,14 @@ def make_pipeline(state):
         # This will be the first input to the stage.
         # We assume the sample name may consist of only alphanumeric
         # characters.
-        # e.g. C2WPF.5_Solexa-201237_5_X4311_1.fastq.gz
         # filter=formatter('(?P<path>.+)/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+)_1.fastq.gz'),
-        filter=formatter('.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+)_1.fastq.gz'),
+        filter=formatter(
+            '.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+)_1.fastq.gz'),
         # Add one more inputs to the stage:
         #    1. The corresponding R2 FASTQ file
         # e.g. C2WPF.5_Solexa-201237_5_X4311_1.fastq.gz
-        add_inputs=add_inputs('{path[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}_2.fastq.gz'),
+        add_inputs=add_inputs(
+            '{path[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}_2.fastq.gz'),
         # Add an "extra" argument to the state (beyond the inputs and outputs)
         # which is the sample name. This is needed within the stage for finding out
         # sample specific configuration options
@@ -79,9 +80,11 @@ def make_pipeline(state):
         name='local_realignment_gatk',
         input=output_from('realigner_target_creator'),
         # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).chr.intervals'),
-        filter=formatter('.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).intervals'),
+        filter=formatter(
+            '.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).intervals'),
         # add_inputs=add_inputs('{path[0]}/{sample[0]}.sort.dedup.bam'),
-        add_inputs=add_inputs('alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.bam'),
+        add_inputs=add_inputs(
+            'alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.bam'),
         output='alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam')
         .follows('mark_duplicates_picard'))
 
@@ -99,21 +102,24 @@ def make_pipeline(state):
         name='print_reads_gatk',
         input=output_from('base_recalibration_gatk'),
         # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).recal_data.csv'),
-        filter=formatter('.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).recal_data.csv'),
+        filter=formatter(
+            '.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).recal_data.csv'),
         # add_inputs=add_inputs('{path[0]}/{sample[0]}.sort.dedup.realn.bam'),
-        add_inputs=add_inputs('alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam'),
+        add_inputs=add_inputs(
+            'alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam'),
         # output='{path[0]}/{sample[0]}.sort.dedup.realn.recal.bam')
         output='alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.recal.bam')
         .follows('local_realignment_gatk'))
 
     # Merge lane bams to sample bams
-    pipeline.collate(
-        task_func=stages.merge_sample_bams,
-        name='merge_sample_bams',
-        filter=formatter('.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).sort.dedup.realn.recal.bam'),
-        # inputs=add_inputs('alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam'),
-        input=output_from('print_reads_gatk'),
-        output='alignments/{sample[0]}/{sample[0]}.merged.bam')
+    # pipeline.collate(
+    #     task_func=stages.merge_sample_bams,
+    #     name='merge_sample_bams',
+    #     filter=formatter(
+    #         '.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).sort.dedup.realn.recal.bam'),
+    #     # inputs=add_inputs('alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam'),
+    #     input=output_from('print_reads_gatk'),
+    #     output='alignments/{sample[0]}/{sample[0]}.merged.bam')
 
     #
     # # Call variants using GATK

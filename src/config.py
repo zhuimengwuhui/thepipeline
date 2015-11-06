@@ -11,6 +11,7 @@ import yaml
 
 
 class Config(object):
+
     def __init__(self, config_filename):
         # Try to open and parse the YAML formatted config file
         with open(config_filename) as config_file:
@@ -34,8 +35,8 @@ class Config(object):
         if option in self.config:
             return self.config[option]
         else:
-            raise Exception("Unknown option: {}, not in configuration " \
-                "file: {}".format(option, self.config_filename))
+            raise Exception("Unknown option: {}, not in configuration "
+                            "file: {}".format(option, self.config_filename))
 
     def get_stage_options(self, stage, *options):
         num_options = len(options)
@@ -62,14 +63,13 @@ class Config(object):
                     return defaults[option]
                 else:
                     # Option does not have a default value
-                    raise Exception("Option: {} not defined in config for " \
-                        "stage: {} nor in defaults in configuration " \
-                        "file {}".format(option, stage, self.config_filename))
+                    raise Exception("Option: {} not defined in config for "
+                                    "stage: {} nor in defaults in configuration "
+                                    "file {}".format(option, stage, self.config_filename))
         else:
             # Stage does not exist in the config file
-            raise Exception("Unknown stage: {}, not in configuration " \
-                "file: {}".format(stage, self.config_filename))
-
+            raise Exception("Unknown stage: {}, not in configuration "
+                            "file: {}".format(stage, self.config_filename))
 
     def validate(self):
         '''Check that the configuration is valid.'''
@@ -85,6 +85,6 @@ class Config(object):
 
 def check_required_field(config, filename, field):
     '''Utility to check whether a field exists in the config dictionary'''
-    if field  not in config:
-        raise Exception("Configuration file {} does not have '{}' " \
-            "field".format(filename, field))
+    if field not in config:
+        raise Exception("Configuration file {} does not have '{}' "
+                        "field".format(filename, field))
