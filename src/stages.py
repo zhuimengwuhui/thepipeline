@@ -164,7 +164,7 @@ class Stages(object):
                       'VALIDATION_STRINGENCY=LENIENT ' \
                       'MAX_RECORDS_IN_RAM=5000000 ASSUME_SORTED=True ' \
                       'CREATE_INDEX=True'.format(bams_in=bam_files, merged_bam_out=bam_out)
-        self.run_picard('merge_sample_bams', picard_args)  
+        self.run_picard('merge_sample_bams', picard_args)
 
 
 
