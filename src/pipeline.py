@@ -45,8 +45,7 @@ def make_pipeline(state):
         extras=['{readid[0]}', '{lib[0]}', '{lane[0]}', '{sample[0]}'],
         # extras=['{sample[0]}'],
         # The output file name is the sample name with a .bam extension.
-        # output='alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.bam')
-        output='alignments/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.bam')
+        output='alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.bam')
 
     # Sort the BAM file using Picard
     pipeline.transform(
@@ -83,8 +82,7 @@ def make_pipeline(state):
         filter=formatter('.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).intervals'),
         # add_inputs=add_inputs('{path[0]}/{sample[0]}.sort.dedup.bam'),
         add_inputs=add_inputs('alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.bam'),
-        output='alignments/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam')
-        # output='alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam')
+        output='alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam')
         .follows('mark_duplicates_picard'))
 
     # Base recalibration using GATK
@@ -105,8 +103,7 @@ def make_pipeline(state):
         # add_inputs=add_inputs('{path[0]}/{sample[0]}.sort.dedup.realn.bam'),
         add_inputs=add_inputs('alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam'),
         # output='{path[0]}/{sample[0]}.sort.dedup.realn.recal.bam')
-        # output='alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.recal.bam')
-        output='alignments/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.recal.bam')
+        output='alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.recal.bam')
         .follows('local_realignment_gatk'))
 
     # Merge lane bams to sample bams
@@ -116,8 +113,7 @@ def make_pipeline(state):
         filter=formatter('.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).sort.dedup.realn.recal.bam'),
         # inputs=add_inputs('alignments/{sample[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}.sort.dedup.realn.bam'),
         input=output_from('print_reads_gatk'),
-        # output='alignments/{sample[0]}/{sample[0]}.merged.bam')
-        output='alignments/{sample[0]}.merged.bam')
+        output='alignments/{sample[0]}/{sample[0]}.merged.bam')
 
     #
     # # Call variants using GATK
