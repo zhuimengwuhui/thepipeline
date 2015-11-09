@@ -138,7 +138,7 @@ def make_pipeline(state):
     # Generate RealignerTargetCreator using GATK
     pipeline.transform(
         task_func=stages.realigner_target_creator,
-        name='realigner_target_creator',
+        name='realigner_target_creator2',
         input=output_from('mark_duplicates_picard2'),
         filter=suffix('.dedup.bam'),
         output='.intervals')
@@ -147,7 +147,7 @@ def make_pipeline(state):
     (pipeline.transform(
         task_func=stages.local_realignment_gatk,
         name='local_realignment_gatk2',
-        input=output_from('realigner_target_creator'),
+        input=output_from('realigner_target_creator2'),
         filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).intervals'),
         # filter=formatter(
             # '.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).intervals'),
