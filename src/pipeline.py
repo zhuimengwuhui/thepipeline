@@ -134,6 +134,30 @@ def make_pipeline(state):
         # XXX should make metricsup an extra output?
         output=['.dedup.bam', '.metricsdup'])
 
+    # Local realignment2 using GATK
+    # Generate RealignerTargetCreator using GATK
+    pipeline.transform(
+        task_func=stages.realigner_target_creator,
+        name='realigner_target_creator',
+        input=output_from('mark_duplicates_picard2'),
+        filter=suffix('.dedup.bam'),
+        output='.intervals')
+
+    # Local realignment using GATK
+    (pipeline.transform(
+        task_func=stages.local_realignment_gatk,
+        name='local_realignment_gatk2',
+        input=output_from('realigner_target_creator'),
+        filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).intervals'),
+        # filter=formatter(
+            # '.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).intervals'),
+        # add_inputs=add_inputs('{path[0]}/{sample[0]}.sort.dedup.bam'),
+        add_inputs=add_inputs(
+            'alignments/{sample[0]}/{sample[0]}.merged.dedup.bam'),
+        output='alignments/{sample[0]}/{sample[0]}.merged.dedup.realn.bam')
+        .follows('mark_duplicates_picard2'))
+
+
     #
     # # Call variants using GATK
     # pipeline.transform(
