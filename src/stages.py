@@ -163,25 +163,26 @@ class Stages(object):
                           bams_in=bam_files, merged_bam_out=bam_out)
         self.run_picard('merge_sample_bams', picard_args)
 
-    def call_variants_gatk(self, bam_in, vcf_out):
+    def call_haplotypecaller_gatk(self, bam_in, vcf_out):
         '''Call variants using GATK'''
+        # safe_make_dir('variants}'.format(sample=sample_id))
         gatk_args = "-T HaplotypeCaller -R {reference} --min_base_quality_score 20 " \
-                    "--variant_index_parameter 128000 --emitRefConfidence GVCF " \
-                    "--standard_min_confidence_threshold_for_calling 30.0 " \
-                    "--num_cpu_threads_per_data_thread 8 " \
-                    "--variant_index_type LINEAR " \
-                    "--standard_min_confidence_threshold_for_emitting 30.0 " \
-                    "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,
-                                                                  bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
-        self.run_gatk('call_variants_gatk', gatk_args)
+                    # "--variant_index_parameter 128000 --emitRefConfidence GVCF " \
+            "--standard_min_confidence_threshold_for_calling 30.0 " \
+                "--num_cpu_threads_per_data_thread 8 " \
+                "--variant_index_type LINEAR " \
+                "--standard_min_confidence_threshold_for_emitting 30.0 " \
+                "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,
+                                                              bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
+        self.run_gatk('call_haplotypecaller_gatk', gatk_args)
 
     def combine_gvcf_gatk(self, vcf_files_in, vcf_out):
         '''Combine G.VCF files for all samples using GATK'''
         g_vcf_files = ' '.join(['--variant ' + vcf for vcf in vcf_files_in])
         gatk_args = "-T CombineGVCFs -R {reference} " \
                     "--disable_auto_index_creation_and_locking_when_reading_rods " \
-                    "{g_vcf_files} -o {vcf_out}".format(reference=self.reference,
-                                                        g_vcf_files=g_vcf_files, vcf_out=vcf_out)
+                    "{g_vcf_files} -o {vcf_out} --variant {CEU}".format(reference=self.reference,
+                                                                        g_vcf_files=g_vcf_files, vcf_out=vcf_out, CEU=self.CEU_mergeGvcf)
         self.run_gatk('combine_gvcf_gatk', gatk_args)
 
     def genotype_gvcf_gatk(self, merged_vcf_in, vcf_out):
