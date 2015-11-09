@@ -167,13 +167,12 @@ class Stages(object):
         '''Call variants using GATK'''
         # safe_make_dir('variants}'.format(sample=sample_id))
         gatk_args = "-T HaplotypeCaller -R {reference} --min_base_quality_score 20 " \
-                    # "--variant_index_parameter 128000 --emitRefConfidence GVCF " \
-            "--standard_min_confidence_threshold_for_calling 30.0 " \
-                "--num_cpu_threads_per_data_thread 8 " \
-                "--variant_index_type LINEAR " \
-                "--standard_min_confidence_threshold_for_emitting 30.0 " \
-                "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,
-                                                              bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
+                    "--standard_min_confidence_threshold_for_calling 30.0 " \
+                    "--num_cpu_threads_per_data_thread 8 " \
+                    "--variant_index_type LINEAR " \
+                    "--standard_min_confidence_threshold_for_emitting 30.0 " \
+                    "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,
+                                                          bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
         self.run_gatk('call_haplotypecaller_gatk', gatk_args)
 
     def combine_gvcf_gatk(self, vcf_files_in, vcf_out):
