@@ -130,7 +130,7 @@ def make_pipeline(state):
         input=output_from('merge_sample_bams'),
         # filter=formatter(
             # '.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).merged.bam'),
-        filter=suffix('.dedup.bam'),
+        filter=suffix('.merged.bam'),
         # XXX should make metricsup an extra output?
         output=['.dedup.bam', '.metricsdup'])
 
