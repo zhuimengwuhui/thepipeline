@@ -122,6 +122,18 @@ def make_pipeline(state):
         input=output_from('print_reads_gatk'),
         output='alignments/{sample[0]}/{sample[0]}.merged.bam')
 
+
+    # Mark duplicates in the BAM file using Picard
+    pipeline.transform(
+        task_func=stages.mark_duplicates_picard,
+        name='mark_duplicates_picard',
+        input=output_from('merge_sample_bams'),
+        # filter=formatter(
+            # '.+/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+).merged.bam'),
+        filter=suffix('.dedup.bam'),
+        # XXX should make metricsup an extra output?
+        output=['.dedup.bam', '.metricsdup'])
+
     #
     # # Call variants using GATK
     # pipeline.transform(
