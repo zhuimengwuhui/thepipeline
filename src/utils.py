@@ -8,3 +8,5 @@ def safe_make_dir(path):
     '''Make a directory if it does not already exist'''
     if not os.path.exists(path):
         os.makedirs(path)
+    else:
+        pass

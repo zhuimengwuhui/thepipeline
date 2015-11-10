@@ -9,11 +9,11 @@ setup(
     author_email='khalid.mahmood@unimelb.edu.au',
     packages=['src'],
     entry_points={
-        'console_scripts': ['thepipepine = src.main:main']
+        'console_scripts': ['thepipeline = src.main:main']
     },
     url='https://github.com/khalidm/thepipepine',
     license='LICENSE.txt',
-    description='thepipepine is a bioinformatics pipeline to filter and \
+    description='thepipeline is a bioinformatics pipeline to filter and \
      annotate a vcf file.',
     long_description=open('README.md').read(),
     install_requires=[
