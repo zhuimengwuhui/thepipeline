@@ -185,8 +185,8 @@ class Stages(object):
                     "-A StrandBiasBySample -A StrandOddsRatio " \
                     "-A TandemRepeatAnnotator -A VariantType " \
                     "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,
-                                                          bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
-        self.run_gatk('call_haplotypecaller_gatk', )
+                        bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
+        self.run_gatk('call_variants_gatk', gatk_args)
 
     def call_haplotypecaller_gatk_nct(self, bam_in, vcf_out):
         '''Call variants using GATK'''
@@ -198,7 +198,7 @@ class Stages(object):
                     "--standard_min_confidence_threshold_for_emitting 30.0 " \
                     "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,
                                                           bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
-        self.run_gatk('call_haplotypecaller_gatk', )
+        self.run_gatk('call_variants_gatk', gatk_args)
 
     def combine_gvcf_gatk(self, vcf_files_in, vcf_out):
         '''Combine G.VCF files for all samples using GATK'''
@@ -242,6 +242,7 @@ class Stages(object):
                     "-resource:omni,known=false,training=true,truth=true,prior=12.0 {one_k_g_snps} " \
                     "-resource:1000G,known=false,training=true,truth=false,prior=10.0 {one_k_g_highconf_snps} " \
                     "-an QD -an MQRankSum -an ReadPosRankSum -an FS -an InbreedingCoeff " \
+                    "-an DP -an FS -an MQ -an SOR " \
                     "-input {genotype_vcf} --recal_file {recal_snp} --tranches_file {tranches_snp} " \
                     "-rscriptFile {snp_plots} -mode SNP".format(reference=self.reference,
                                                                 cores=cores, hapmap=self.hapmap, one_k_g_snps=self.one_k_g_snps,
@@ -258,14 +259,8 @@ class Stages(object):
                     "-resource:mills,known=false,training=true,truth=true,prior=12.0 {mills_hg19} " \
                     "-resource:1000G,known=false,training=true,truth=true,prior=10.0 {one_k_g_indels} " \
                     "-an MQRankSum -an ReadPosRankSum -an FS -input {genotype_vcf} -recalFile {recal_indel} " \
-                    "-an DP " \
-                    "-an QD " \
-                    "-an FS " \
-                    "-an MQRankSum " \
-                    "-an ReadPosRankSum " \
-                    "-an MQ " \
-                    "-an SOR " \
-                    "-an InbreedingCoeff " \
+                    "-an DP -an QD -an MQ " \
+                    "-an SOR -an InbreedingCoeff " \
                     "-tranchesFile {tranches_indel} -rscriptFile {indel_plots} " \
                     " -mode INDEL".format(reference=self.reference,
                                           cores=cores, mills_hg19=self.mills_hg19, one_k_g_indels=self.one_k_g_indels,
