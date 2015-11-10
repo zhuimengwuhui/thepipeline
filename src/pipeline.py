@@ -201,7 +201,7 @@ def make_pipeline(state):
         name='apply_snp_recalibrate_gatk',
         input=output_from('genotype_gvcf_gatk'),
         filter=suffix('.genotyped.vcf'),
-        add_inputs=add_inputs(['PCExomes.snp_recal', 'PCExomes.snp_tranches']),
+        add_inputs=add_inputs(['ALL.snp_recal', 'ALL.snp_tranches']),
         output='.recal_SNP.vcf')
         .follows('snp_recalibrate_gatk'))
 
@@ -212,7 +212,7 @@ def make_pipeline(state):
         input=output_from('genotype_gvcf_gatk'),
         filter=suffix('.genotyped.vcf'),
         add_inputs=add_inputs(
-            ['PCExomes.indel_recal', 'PCExomes.indel_tranches']),
+            ['ALL.indel_recal', 'ALL.indel_tranches']),
         output='.recal_INDEL.vcf')
         .follows('indel_recalibrate_gatk'))
 
@@ -222,9 +222,9 @@ def make_pipeline(state):
         name='combine_variants_gatk',
         input=output_from('apply_snp_recalibrate_gatk'),
         filter=suffix('.recal_SNP.vcf'),
-        add_inputs=add_inputs(['PCExomes.recal_INDEL.vcf']),
+        add_inputs=add_inputs(['ALL.recal_INDEL.vcf']),
         # output='.combined.vcf')
-        output='All.raw.vqsr.vcf')
+        output='ALL.raw.vqsr.vcf')
         .follows('apply_indel_recalibrate_gatk'))
     #
     # # Select variants using GATK
