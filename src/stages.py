@@ -182,7 +182,7 @@ class Stages(object):
                     "-A StrandBiasBySample -A StrandOddsRatio " \
                     "-A TandemRepeatAnnotator -A VariantType " \
                     "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,
-                        bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
+                                                                  bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
         self.run_gatk('call_haplotypecaller_gatk', gatk_args)
 
     def call_haplotypecaller_gatk_nct(self, bam_in, vcf_out):
@@ -194,7 +194,7 @@ class Stages(object):
                     "--variant_index_type LINEAR " \
                     "--standard_min_confidence_threshold_for_emitting 30.0 " \
                     "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,
-                                                          bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
+                                                                  bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
         self.run_gatk('call_haplotypecaller_gatk', gatk_args)
 
     def combine_gvcf_gatk(self, vcf_files_in, vcf_out):
@@ -202,8 +202,10 @@ class Stages(object):
         g_vcf_files = ' '.join(['--variant ' + vcf for vcf in vcf_files_in])
         gatk_args = "-T CombineGVCFs -R {reference} " \
                     "--disable_auto_index_creation_and_locking_when_reading_rods " \
-                    "{g_vcf_files} -o {vcf_out} --variant {CEU}".format(reference=self.reference,
-                                                                        g_vcf_files=g_vcf_files, vcf_out=vcf_out, CEU=self.CEU_mergeGvcf)
+                    "{g_vcf_files} -o {vcf_out}".format(reference=self.reference,
+                                g_vcf_files=g_vcf_files, vcf_out=vcf_out)
+        # "{g_vcf_files} -o {vcf_out} --variant {CEU}".format(reference=self.reference,
+        # g_vcf_files=g_vcf_files, vcf_out=vcf_out, CEU=self.CEU_mergeGvcf)
         self.run_gatk('combine_gvcf_gatk', gatk_args)
 
     def genotype_gvcf_gatk(self, merged_vcf_in, vcf_out):

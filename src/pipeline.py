@@ -169,7 +169,7 @@ def make_pipeline(state):
         task_func=stages.combine_gvcf_gatk,
         name='combine_gvcf_gatk',
         input=output_from('call_haplotypecaller_gatk'),
-        output='ALL.combined.vcf')
+        output='variants/ALL.combined.vcf')
 
     # Genotype G.VCF files using GATK
     pipeline.transform(
@@ -177,7 +177,7 @@ def make_pipeline(state):
         name='genotype_gvcf_gatk',
         input=output_from('combine_gvcf_gatk'),
         filter=suffix('.combined.vcf'),
-        output='.genotyped.vcf')
+        output='variants/All.raw.vcf')
 
     # SNP recalibration using GATK
     pipeline.transform(
@@ -223,7 +223,8 @@ def make_pipeline(state):
         input=output_from('apply_snp_recalibrate_gatk'),
         filter=suffix('.recal_SNP.vcf'),
         add_inputs=add_inputs(['PCExomes.recal_INDEL.vcf']),
-        output='.combined.vcf')
+        # output='.combined.vcf')
+        output='variants/All.raw.vqsr.vcf')
         .follows('apply_indel_recalibrate_gatk'))
     #
     # # Select variants using GATK
