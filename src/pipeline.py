@@ -192,7 +192,7 @@ def make_pipeline(state):
         task_func=stages.indel_recalibrate_gatk,
         name='indel_recalibrate_gatk',
         input=output_from('genotype_gvcf_gatk'),
-        filter=suffix('.genotyped.vcf'),
+        filter=suffix('.raw.vcf'),
         output=['.indel_recal', '.indel_tranches', '.indel_plots.R'])
 
     # Apply SNP recalibration using GATK
@@ -200,7 +200,7 @@ def make_pipeline(state):
         task_func=stages.apply_snp_recalibrate_gatk,
         name='apply_snp_recalibrate_gatk',
         input=output_from('genotype_gvcf_gatk'),
-        filter=suffix('.genotyped.vcf'),
+        filter=suffix('.raw.vcf'),
         add_inputs=add_inputs(['ALL.snp_recal', 'ALL.snp_tranches']),
         output='.recal_SNP.vcf')
         .follows('snp_recalibrate_gatk'))
@@ -210,7 +210,7 @@ def make_pipeline(state):
         task_func=stages.apply_indel_recalibrate_gatk,
         name='apply_indel_recalibrate_gatk',
         input=output_from('genotype_gvcf_gatk'),
-        filter=suffix('.genotyped.vcf'),
+        filter=suffix('.raw.vcf'),
         add_inputs=add_inputs(
             ['ALL.indel_recal', 'ALL.indel_tranches']),
         output='.recal_INDEL.vcf')
