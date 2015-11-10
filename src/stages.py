@@ -167,7 +167,7 @@ class Stages(object):
         '''Call variants using GATK'''
         # safe_make_dir('variants}'.format(sample=sample_id))
         gatk_args = "-T HaplotypeCaller -R {reference} --min_base_quality_score 20 " \
-                    "--variant_index_type LINEAR " \
+                    "--emitRefConfidence GVCF " \
                     "-A AlleleBalance -A AlleleBalanceBySample " \
                     "-A ChromosomeCounts -A ClippingRankSumTest " \
                     "-A Coverage -A DepthPerAlleleBySample " \
