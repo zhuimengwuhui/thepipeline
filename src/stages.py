@@ -167,16 +167,13 @@ class Stages(object):
         '''Call variants using GATK'''
         # safe_make_dir('variants}'.format(sample=sample_id))
         gatk_args = "-T HaplotypeCaller -R {reference} --min_base_quality_score 20 " \
-                    "--standard_min_confidence_threshold_for_calling 30.0 " \
                     "--variant_index_type LINEAR " \
-                    "--standard_min_confidence_threshold_for_emitting 30.0 " \
                     "-A AlleleBalance -A AlleleBalanceBySample " \
                     "-A ChromosomeCounts -A ClippingRankSumTest " \
                     "-A Coverage -A DepthPerAlleleBySample " \
                     "-A DepthPerSampleHC -A FisherStrand " \
                     "-A GCContent -A GenotypeSummaries " \
-                    "-A HaplotypeScore -A HardyWeinberg " \
-                    "-A HomopolymerRun -A InbreedingCoeff " \
+                    "-A HardyWeinberg -A HomopolymerRun " \
                     "-A LikelihoodRankSumTest -A LowMQ " \
                     "-A MappingQualityRankSumTest -A MappingQualityZero " \
                     "-A PossibleDeNovo -A QualByDepth " \
@@ -193,7 +190,7 @@ class Stages(object):
         # safe_make_dir('variants}'.format(sample=sample_id))
         gatk_args = "-T HaplotypeCaller -R {reference} --min_base_quality_score 20 " \
                     "--standard_min_confidence_threshold_for_calling 30.0 " \
-                    "--num_cpu_threads_per_data_thread 8 " \
+                    "--num_cpu_threads_per_data_thread 4 " \
                     "--variant_index_type LINEAR " \
                     "--standard_min_confidence_threshold_for_emitting 30.0 " \
                     "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,
@@ -214,6 +211,19 @@ class Stages(object):
         cores = self.get_stage_options('genotype_gvcf_gatk', 'cores')
         gatk_args = "-T GenotypeGVCFs -R {reference} " \
                     "--disable_auto_index_creation_and_locking_when_reading_rods " \
+                    "-A AlleleBalance -A AlleleBalanceBySample " \
+                    "-A ChromosomeCounts -A ClippingRankSumTest " \
+                    "-A Coverage -A DepthPerAlleleBySample " \
+                    "-A DepthPerSampleHC -A FisherStrand " \
+                    "-A GCContent -A GenotypeSummaries " \
+                    "-A HardyWeinberg -A HomopolymerRun " \
+                    "-A LikelihoodRankSumTest -A LowMQ " \
+                    "-A MappingQualityRankSumTest -A MappingQualityZero " \
+                    "-A PossibleDeNovo -A QualByDepth " \
+                    "-A RMSMappingQuality -A ReadPosRankSumTest " \
+                    "-A SampleList -A SpanningDeletions " \
+                    "-A StrandBiasBySample -A StrandOddsRatio " \
+                    "-A TandemRepeatAnnotator -A VariantType " \
                     "--num_threads {cores} --variant {merged_vcf} --out {vcf_out}" \
                     .format(reference=self.reference,
                             cores=cores, merged_vcf=merged_vcf_in, vcf_out=vcf_out)
@@ -241,8 +251,7 @@ class Stages(object):
                     "-resource:hapmap,known=false,training=true,truth=true,prior=15.0 {hapmap} " \
                     "-resource:omni,known=false,training=true,truth=true,prior=12.0 {one_k_g_snps} " \
                     "-resource:1000G,known=false,training=true,truth=false,prior=10.0 {one_k_g_highconf_snps} " \
-                    "-an QD -an MQRankSum -an ReadPosRankSum -an FS -an InbreedingCoeff " \
-                    "-an DP -an FS -an MQ -an SOR " \
+                    "-an DP -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR " \
                     "-input {genotype_vcf} --recal_file {recal_snp} --tranches_file {tranches_snp} " \
                     "-rscriptFile {snp_plots} -mode SNP".format(reference=self.reference,
                                                                 cores=cores, hapmap=self.hapmap, one_k_g_snps=self.one_k_g_snps,
@@ -258,9 +267,8 @@ class Stages(object):
                     "-R {reference} --minNumBadVariants 5000 --num_threads {cores} " \
                     "-resource:mills,known=false,training=true,truth=true,prior=12.0 {mills_hg19} " \
                     "-resource:1000G,known=false,training=true,truth=true,prior=10.0 {one_k_g_indels} " \
-                    "-an MQRankSum -an ReadPosRankSum -an FS -input {genotype_vcf} -recalFile {recal_indel} " \
-                    "-an DP -an QD -an MQ " \
-                    "-an SOR -an InbreedingCoeff " \
+                    "-an DP -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR " \
+                    "-input {genotype_vcf} -recalFile {recal_indel} " \
                     "-tranchesFile {tranches_indel} -rscriptFile {indel_plots} " \
                     " -mode INDEL".format(reference=self.reference,
                                           cores=cores, mills_hg19=self.mills_hg19, one_k_g_indels=self.one_k_g_indels,
