@@ -177,7 +177,7 @@ def make_pipeline(state):
         name='genotype_gvcf_gatk',
         input=output_from('combine_gvcf_gatk'),
         filter=suffix('.combined.vcf'),
-        output='variants/All.raw.vcf')
+        output='.raw.vcf')
 
     # SNP recalibration using GATK
     pipeline.transform(
