@@ -203,7 +203,7 @@ class Stages(object):
         gatk_args = "-T CombineGVCFs -R {reference} " \
                     "--disable_auto_index_creation_and_locking_when_reading_rods " \
                     "{g_vcf_files} -o {vcf_out}".format(reference=self.reference,
-                                g_vcf_files=g_vcf_files, vcf_out=vcf_out)
+                                                        g_vcf_files=g_vcf_files, vcf_out=vcf_out)
         # "{g_vcf_files} -o {vcf_out} --variant {CEU}".format(reference=self.reference,
         # g_vcf_files=g_vcf_files, vcf_out=vcf_out, CEU=self.CEU_mergeGvcf)
         self.run_gatk('combine_gvcf_gatk', gatk_args)
@@ -219,15 +219,16 @@ class Stages(object):
                     "-A DepthPerSampleHC -A FisherStrand " \
                     "-A GCContent -A GenotypeSummaries " \
                     "-A HardyWeinberg -A HomopolymerRun " \
-                    "-A LikelihoodRankSumTest -A LowMQ " \
+                    "-A LikelihoodRankSumTest " \
                     "-A MappingQualityRankSumTest -A MappingQualityZero " \
                     "-A PossibleDeNovo -A QualByDepth " \
                     "-A RMSMappingQuality -A ReadPosRankSumTest " \
                     "-A SampleList -A SpanningDeletions " \
                     "-A StrandBiasBySample -A StrandOddsRatio " \
                     "-A TandemRepeatAnnotator -A VariantType " \
+                    "--dbsnp {dbsnp} "
                     "--num_threads {cores} --variant {merged_vcf} --out {vcf_out}" \
-                    .format(reference=self.reference,
+                    .format(reference=self.reference, dbsnp=self.dbsnp_hg19,
                             cores=cores, merged_vcf=merged_vcf_in, vcf_out=vcf_out)
         self.run_gatk('genotype_gvcf_gatk', gatk_args)
 
