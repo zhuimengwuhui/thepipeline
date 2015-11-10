@@ -273,7 +273,7 @@ class Stages(object):
                     "-an DP -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR " \
                     "-input {genotype_vcf} -recalFile {recal_indel} " \
                     "-tranchesFile {tranches_indel} -rscriptFile {indel_plots} " \
-                    " -mode INDEL".format(reference=self.reference,
+                    " -mode INDEL --maxGaussians 4".format(reference=self.reference,
                                           cores=cores, mills_hg19=self.mills_hg19, one_k_g_indels=self.one_k_g_indels,
                                           genotype_vcf=genotype_vcf_in, recal_indel=recal_indel_out,
                                           tranches_indel=tranches_indel_out, indel_plots=indel_plots_r_out)
