@@ -176,7 +176,7 @@ class Stages(object):
                     "-A HardyWeinberg -A HomopolymerRun " \
                     "-A LikelihoodRankSumTest -A LowMQ " \
                     "-A MappingQualityRankSumTest -A MappingQualityZero " \
-                    "-A PossibleDeNovo -A QualByDepth " \
+                    "-A QualByDepth " \
                     "-A RMSMappingQuality -A ReadPosRankSumTest " \
                     "-A SampleList -A SpanningDeletions " \
                     "-A StrandBiasBySample -A StrandOddsRatio " \
@@ -221,7 +221,7 @@ class Stages(object):
                     "-A HardyWeinberg -A HomopolymerRun " \
                     "-A LikelihoodRankSumTest " \
                     "-A MappingQualityRankSumTest -A MappingQualityZero " \
-                    "-A PossibleDeNovo -A QualByDepth " \
+                    "-A QualByDepth " \
                     "-A RMSMappingQuality -A ReadPosRankSumTest " \
                     "-A SampleList -A SpanningDeletions " \
                     "-A StrandBiasBySample -A StrandOddsRatio " \
