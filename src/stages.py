@@ -186,7 +186,7 @@ class Stages(object):
                     "-A TandemRepeatAnnotator -A VariantType " \
                     "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,
                         bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
-        self.run_gatk('call_variants_gatk', gatk_args)
+        self.run_gatk('call_haplotypecaller_gatk', gatk_args)
 
     def call_haplotypecaller_gatk_nct(self, bam_in, vcf_out):
         '''Call variants using GATK'''
@@ -198,7 +198,7 @@ class Stages(object):
                     "--standard_min_confidence_threshold_for_emitting 30.0 " \
                     "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,
                                                           bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
-        self.run_gatk('call_variants_gatk', gatk_args)
+        self.run_gatk('call_haplotypecaller_gatk', gatk_args)
 
     def combine_gvcf_gatk(self, vcf_files_in, vcf_out):
         '''Combine G.VCF files for all samples using GATK'''
