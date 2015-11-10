@@ -226,7 +226,7 @@ class Stages(object):
                     "-A SampleList -A SpanningDeletions " \
                     "-A StrandBiasBySample -A StrandOddsRatio " \
                     "-A TandemRepeatAnnotator -A VariantType " \
-                    "--dbsnp {dbsnp} "
+                    "--dbsnp {dbsnp} " \
                     "--num_threads {cores} --variant {merged_vcf} --out {vcf_out}" \
                     .format(reference=self.reference, dbsnp=self.dbsnp_hg19,
                             cores=cores, merged_vcf=merged_vcf_in, vcf_out=vcf_out)
