@@ -14,7 +14,6 @@ import os
 PICARD_JAR = '$PICARD_HOME/picard.jar'
 GATK_JAR = '$GATK_HOME/GenomeAnalysisTK.jar'
 
-
 def java_command(jar_path, mem_in_gb, command_args):
     '''Build a string for running a java command'''
     # Bit of room between Java's max heap memory and what was requested.
@@ -30,7 +29,6 @@ def run_java(state, stage, jar_path, mem, args):
 
 
 class Stages(object):
-
     def __init__(self, state):
         self.state = state
         self.reference = self.get_options('ref_hg19')

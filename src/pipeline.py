@@ -235,4 +235,5 @@ def make_pipeline(state):
     #     filter=suffix('.combined.vcf'),
     #     output='.selected.vcf')
 
+
     return pipeline
