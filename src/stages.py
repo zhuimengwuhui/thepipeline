@@ -104,7 +104,8 @@ class Stages(object):
         cores = self.get_stage_options('chrom_intervals_gatk', 'cores')
         gatk_args = '-T RealignerTargetCreator -R {reference} -I {bam} ' \
                     '--num_threads {threads} --known {mills_hg19} ' \
-                    # '--known {one_k_g_indels} -L {interval_hg19} ' \
+                    '--known {one_k_g_indels} ' \
+                    # '-L {interval_hg19} ' \
                     '--known {one_k_g_indels} ' \
                     '-o {out}'.format(reference=self.reference, bam=bam_in,
                                       threads=cores, mills_hg19=self.mills_hg19,
@@ -181,7 +182,7 @@ class Stages(object):
                     "-A SampleList -A SpanningDeletions " \
                     "-A StrandBiasBySample -A StrandOddsRatio " \
                     "-A TandemRepeatAnnotator -A VariantType " \
-                    "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,                    
+                    "-I {bam} -L {interval_list} -o {out}".format(reference=self.reference,
                                                                   bam=bam_in, interval_list=self.interval_hg19, out=vcf_out)
         self.run_gatk('call_haplotypecaller_gatk', gatk_args)
 
