@@ -34,11 +34,13 @@ def make_pipeline(state):
         # characters.
         # filter=formatter('(?P<path>.+)/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+)_1.fastq.gz'),
         # 1_HFYLVCCXX:2:TCCGCGAA_2_GE0343_1.fastq.gz
-        filter=formatter('.+/(?P<readid>[a-zA-Z0-9-.]+)_(?P<lib>[a-zA-Z0-9-:]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9-]+)_1.fastq.gz'),
+        filter=formatter(
+            '.+/(?P<readid>[a-zA-Z0-9-]+)_(?P<lib>[a-zA-Z0-9-:]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9-]+)_1.fastq.gz'),
         # Add one more inputs to the stage:
         #    1. The corresponding R2 FASTQ file
         # e.g. C2WPF.5_Solexa-201237_5_X4311_1.fastq.gz
-        add_inputs=add_inputs('{path[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}_2.fastq.gz'),
+        add_inputs=add_inputs(
+            '{path[0]}/{readid[0]}_{lib[0]}_{lane[0]}_{sample[0]}_2.fastq.gz'),
         # Add an "extra" argument to the state (beyond the inputs and outputs)
         # which is the sample name. This is needed within the stage for finding out
         # sample specific configuration options
