@@ -38,7 +38,7 @@ class Stages(object):
         self.one_k_g_indels = self.get_options('one_k_g_indels')
         self.one_k_g_highconf_snps = self.get_options('one_k_g_highconf_snps')
         self.hapmap = self.get_options('hapmap')
-        self.interval_hg19 = self.get_options('interval_hg19')
+        self.interval_hg19 = self.get_options('exome_bed_hg19')
         self.CEU_mergeGvcf = self.get_options('CEU_mergeGvcf')
         # self.GBR_mergeGvcf = self.get_options('GBR_mergeGvcf')
         # self.FIN_mergeGvcf = self.get_options('FIN_mergeGvcf')
