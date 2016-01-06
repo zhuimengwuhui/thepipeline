@@ -178,7 +178,7 @@ class Stages(object):
                     "-A SampleList -A SpanningDeletions " \
                     "-A StrandBiasBySample -A StrandOddsRatio " \
                     "-A TandemRepeatAnnotator -A VariantType " \
-                    "-I {bam} -o {out}".format(reference=self.reference,
+                    "-I {bam} -L {interval_hg19} -o {out}".format(reference=self.reference,
                                                                   bam=bam_in, out=vcf_out)
         self.run_gatk('call_haplotypecaller_gatk', gatk_args)
 
