@@ -179,7 +179,7 @@ class Stages(object):
                     "-A StrandBiasBySample -A StrandOddsRatio " \
                     "-A TandemRepeatAnnotator -A VariantType " \
                     "-I {bam} -L {interval_hg19} -o {out}".format(reference=self.reference,
-                                                                  bam=bam_in, out=vcf_out)
+                                                                  bam=bam_in, interval_hg19=self.interval_hg19, out=vcf_out)
         self.run_gatk('call_haplotypecaller_gatk', gatk_args)
 
     def call_haplotypecaller_gatk_nct(self, bam_in, vcf_out):
