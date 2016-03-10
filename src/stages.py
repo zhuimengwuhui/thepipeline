@@ -210,19 +210,6 @@ class Stages(object):
         cores = self.get_stage_options('genotype_gvcf_gatk', 'cores')
         gatk_args = "-T GenotypeGVCFs -R {reference} " \
                     "--disable_auto_index_creation_and_locking_when_reading_rods " \
-                    # "-A AlleleBalance -A AlleleBalanceBySample " \
-                    # "-A ChromosomeCounts -A ClippingRankSumTest " \
-                    # "-A Coverage -A DepthPerAlleleBySample " \
-                    # "-A DepthPerSampleHC -A FisherStrand " \
-                    # "-A GCContent -A GenotypeSummaries " \
-                    # "-A HardyWeinberg -A HomopolymerRun " \
-                    # "-A LikelihoodRankSumTest " \
-                    # "-A MappingQualityRankSumTest -A MappingQualityZero " \
-                    # "-A QualByDepth " \
-                    # "-A RMSMappingQuality -A ReadPosRankSumTest " \
-                    # "-A SampleList -A SpanningDeletions " \
-                    # "-A StrandBiasBySample -A StrandOddsRatio " \
-                    # "-A TandemRepeatAnnotator -A VariantType " \
                     "--dbsnp {dbsnp} " \
                     "--num_threads {cores} --variant {merged_vcf} --out {vcf_out}" \
                     .format(reference=self.reference, dbsnp=self.dbsnp_hg19,
