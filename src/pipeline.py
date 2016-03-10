@@ -161,7 +161,7 @@ def make_pipeline(state):
         name='call_haplotypecaller_gatk',
         input=output_from('local_realignment_gatk2'),
         # filter=suffix('.merged.dedup.realn.bam'),
-        filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).merged.dedup.realn.bam'),
+        filter=formatter('.+/(?P<sample>[a-zA-Z0-9-]+).merged.dedup.realn.bam'),
         output='variants/{sample[0]}.g.vcf')
 
     # Combine G.VCF files for all samples using GATK
