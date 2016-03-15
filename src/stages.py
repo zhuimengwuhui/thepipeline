@@ -12,7 +12,7 @@ from runner import run_stage
 import os
 
 PICARD_JAR = '$PICARD_HOME/picard.jar'
-PICARD_JAR = '/vlsci/VR0002/kmahmood/Programs/picard/picard-tools-2.0.1/picard.jar'
+PICARD_JAR = '/vlsci/VR0002/kmahmood//Programs/picard/picard-tools-2.1.1/picard.jar'
 GATK_JAR = '$GATK_HOME/GenomeAnalysisTK.jar'
 
 def java_command(jar_path, mem_in_gb, command_args):
