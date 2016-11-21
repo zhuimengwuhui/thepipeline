@@ -34,8 +34,9 @@ def make_pipeline(state):
         # characters.
         # filter=formatter('(?P<path>.+)/(?P<readid>[a-zA-Z0-9-\.]+)_(?P<lib>[a-zA-Z0-9-]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9]+)_1.fastq.gz'),
         # 1_HFYLVCCXX:2:TCCGCGAA_2_GE0343_1.fastq.gz
+        # 1_HCJWFBCXX:GGACTCCT_L001_9071584415739518822-AGRF-023_R2.fastq.gz
         filter=formatter(
-            '.+/(?P<readid>[a-zA-Z0-9-]+)_(?P<lib>[a-zA-Z0-9-:]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9-]+)_R1.fastq.gz'),
+            '(?P<path>.+)/(?P<readid>[a-zA-Z0-9-]+)_(?P<lib>[a-zA-Z0-9-:]+)_(?P<lane>[a-zA-Z0-9]+)_(?P<sample>[a-zA-Z0-9-]+)_R1.fastq.gz'),
         # Add one more inputs to the stage:
         #    1. The corresponding R2 FASTQ file
         # e.g. C2WPF.5_Solexa-201237_5_X4311_1.fastq.gz
