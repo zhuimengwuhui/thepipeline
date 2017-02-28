@@ -198,7 +198,7 @@ def make_pipeline(state):
         name='apply_snp_recalibrate_gatk',
         input=output_from('genotype_gvcf_gatk'),
         filter=suffix('.raw.vcf'),
-        add_inputs=add_inputs(['ALL.snp_recal', 'ALL.snp_tranches']),
+        add_inputs=add_inputs(['variants/ALL.snp_recal', 'variants/ALL.snp_tranches']),
         output='.recal_SNP.vcf')
         .follows('snp_recalibrate_gatk'))
 
@@ -217,7 +217,7 @@ def make_pipeline(state):
         input=output_from('genotype_gvcf_gatk'),
         filter=suffix('.recal_SNP.vcf'),
         add_inputs=add_inputs(
-            ['ALL.indel_recal', 'ALL.indel_tranches']),
+            ['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
         output='ALL.raw.vqsr.vcf')
         .follows('indel_recalibrate_gatk'))
 
