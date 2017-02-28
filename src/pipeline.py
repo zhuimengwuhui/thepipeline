@@ -214,7 +214,7 @@ def make_pipeline(state):
     (pipeline.transform(
         task_func=stages.apply_indel_recalibrate_gatk,
         name='apply_indel_recalibrate_gatk',
-        input=output_from('genotype_gvcf_gatk'),
+        input=output_from('indel_recalibrate_gatk'),
         filter=suffix('.recal_SNP.vcf'),
         add_inputs=add_inputs(
             ['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
