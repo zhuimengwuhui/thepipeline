@@ -218,7 +218,7 @@ def make_pipeline(state):
         filter=suffix('.recal_SNP.vcf'),
         add_inputs=add_inputs(
             ['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
-        output='ALL.raw.vqsr.vcf')
+        output='.raw.vqsr.vcf')
         .follows('indel_recalibrate_gatk'))
 
     # Combine variants using GATK
