@@ -41,6 +41,8 @@ class Stages(object):
         self.hapmap = self.get_options('hapmap')
         self.interval_hg19 = self.get_options('exome_bed_hg19')
         self.CEU_mergeGvcf = self.get_options('CEU_mergeGvcf')
+        self.snpeff_conf = self.get_options('snpeff_conf')
+        self.vep_path = self.get_options('vep_path')
         # self.GBR_mergeGvcf = self.get_options('GBR_mergeGvcf')
         # self.FIN_mergeGvcf = self.get_options('FIN_mergeGvcf')
 
@@ -300,6 +302,23 @@ class Stages(object):
                                                       cores=cores, genotype_vcf=genotype_vcf_in, recal_indel=recal_indel,
                                                       tranches_indel=tranches_indel, vcf_out=vcf_out)
         self.run_gatk('apply_indel_recalibrate_gatk', gatk_args)
+
+    def apply_vep(self, inputs, vcf_out):
+        '''Apply VEP'''
+        vcf_in = inputs
+        cores = self.get_stage_options('apply_vep', 'cores')
+        vep_command = "{vep_path}/variant_effect_predictor.pl --cache -i {vcf_in} --format vcf -o {vcf_vep} --force_overwrite --vcf " \
+                    "--fork {threads} --everything --offline --coding_only --no_intergenic".format(
+                    vep_path=self.vep_path, vcf_in=vcf_in, vcf_vep=vcf_out, threads=cores)
+        self.run_stage(self.state, 'apply_vep', vep_command)
+
+    def apply_snpeff(self, inputs, vcf_out):
+        '''Apply SnpEFF'''
+        vcf_in = inputs
+        cores = self.get_stage_options('apply_snpeff', 'cores')
+        snpeff_command = "RunSNPEFF -c {snpeff_conf} -canon hg19 {vcf_in} > {vcf_out}".format(
+                    snpeff_conf=self.snpeff_conf, vcf_in=vcf_in, vcf_out=vcf_out)
+        self.run_stage(self.state, 'apply_snpeff', snpeff_command)
 
     def combine_variants_gatk(self, inputs, vcf_out):
         '''Combine variants using GATK'''

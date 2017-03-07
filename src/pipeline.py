@@ -221,6 +221,26 @@ def make_pipeline(state):
         output='.raw.vqsr.vcf')
         .follows('indel_recalibrate_gatk'))
 
+    # Apply VEP
+    (pipeline.transform(
+        task_func=stages.apply_vep,
+        name='apply_vep',
+        input=output_from('apply_indel_recalibrate_gatk'),
+        filter=suffix('.raw.vqsr.vcf'),
+        # add_inputs=add_inputs(['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
+        output='.raw.vqsr.vep.vcf')
+        .follows('apply_indel_recalibrate_gatk'))
+
+    # Apply SnpEff
+    (pipeline.transform(
+        task_func=stages.apply_snpeff,
+        name='apply_snpeff',
+        input=output_from('apply_vep'),
+        filter=suffix('.raw.vqsr.vep.vcf'),
+        # add_inputs=add_inputs(['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
+        output='.raw.vqsr.vep.snpeff.vcf')
+        .follows('apply_vep'))
+
     # Combine variants using GATK
     # (pipeline.transform(
     #     task_func=stages.combine_variants_gatk,
