@@ -335,7 +335,7 @@ class Stages(object):
         cores = self.get_stage_options('apply_snpeff', 'cores')
         snpeff_command = "RunSNPEFF -c {snpeff_conf} -canon GRCh37.75 {vcf_in} > {vcf_out}".format(
                     snpeff_conf=self.snpeff_conf, vcf_in=vcf_in, vcf_out=vcf_out)
-        self.run_picard('apply_snpeff', snpeff_command)
+        self.run_snpeff('apply_snpeff', snpeff_command)
         #run_snpeff(self.state, 'apply_snpeff', snpeff_command)
 
     def combine_variants_gatk(self, inputs, vcf_out):
