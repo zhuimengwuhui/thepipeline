@@ -316,7 +316,7 @@ class Stages(object):
         '''Apply SnpEFF'''
         vcf_in = inputs
         cores = self.get_stage_options('apply_snpeff', 'cores')
-        snpeff_command = "RunSNPEFF -c {snpeff_conf} -canon hg19 {vcf_in} > {vcf_out}".format(
+        snpeff_command = "RunSNPEFF -c {snpeff_conf} -canon GRCh37.75 {vcf_in} > {vcf_out}".format(
                     snpeff_conf=self.snpeff_conf, vcf_in=vcf_in, vcf_out=vcf_out)
         run_stage(self.state, 'apply_snpeff', snpeff_command)
 
