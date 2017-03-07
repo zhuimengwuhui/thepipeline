@@ -43,6 +43,7 @@ class Stages(object):
         self.CEU_mergeGvcf = self.get_options('CEU_mergeGvcf')
         self.snpeff_conf = self.get_options('snpeff_conf')
         self.vep_path = self.get_options('vep_path')
+        self.vt_path = self.get_options('vt_path')
         # self.GBR_mergeGvcf = self.get_options('GBR_mergeGvcf')
         # self.FIN_mergeGvcf = self.get_options('FIN_mergeGvcf')
 
@@ -302,6 +303,16 @@ class Stages(object):
                                                       cores=cores, genotype_vcf=genotype_vcf_in, recal_indel=recal_indel,
                                                       tranches_indel=tranches_indel, vcf_out=vcf_out)
         self.run_gatk('apply_indel_recalibrate_gatk', gatk_args)
+
+    def apply_vt(self, inputs, vcf_out):
+        '''Apply NORM'''
+        vcf_in = inputs
+        cores = self.get_stage_options('apply_vt', 'cores')
+        vt_command = "{vt_path} decompose -s {vcf_in} - | {vt_path} normalize -r {reference} - | " \
+                    "{vt_path} uniq - -o {vcf_out}".format(
+                    vt_path=self.vt_path, vcf_in=vcf_in, vt_path=self.vt_path, reference=self.reference,
+                    vt_path=self.vt_path, vcf_out=vcf_out)
+        run_stage(self.state, 'apply_vt', vt_command)
 
     def apply_vep(self, inputs, vcf_out):
         '''Apply VEP'''
