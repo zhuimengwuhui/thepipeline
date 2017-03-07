@@ -239,7 +239,7 @@ def make_pipeline(state):
         filter=suffix('.raw.vqsr.vcf'),
         # add_inputs=add_inputs(['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
         output='.raw.vqsr.vt.vep.vcf')
-        .follows('apply_indel_recalibrate_gatk'))
+        .follows('apply_vt'))
 
     # Apply SnpEff
     (pipeline.transform(
