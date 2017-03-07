@@ -310,7 +310,7 @@ class Stages(object):
         vep_command = "{vep_path}/variant_effect_predictor.pl --cache -i {vcf_in} --format vcf -o {vcf_vep} --force_overwrite --vcf " \
                     "--fork {threads} --everything --offline --coding_only --no_intergenic".format(
                     vep_path=self.vep_path, vcf_in=vcf_in, vcf_vep=vcf_out, threads=cores)
-        self.run_stage(self.state, 'apply_vep', vep_command)
+        run_stage(self.state, 'apply_vep', vep_command)
 
     def apply_snpeff(self, inputs, vcf_out):
         '''Apply SnpEFF'''
@@ -318,7 +318,7 @@ class Stages(object):
         cores = self.get_stage_options('apply_snpeff', 'cores')
         snpeff_command = "RunSNPEFF -c {snpeff_conf} -canon hg19 {vcf_in} > {vcf_out}".format(
                     snpeff_conf=self.snpeff_conf, vcf_in=vcf_in, vcf_out=vcf_out)
-        self.run_stage(self.state, 'apply_snpeff', snpeff_command)
+        run_stage(self.state, 'apply_snpeff', snpeff_command)
 
     def combine_variants_gatk(self, inputs, vcf_out):
         '''Combine variants using GATK'''
