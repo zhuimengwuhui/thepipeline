@@ -308,10 +308,10 @@ class Stages(object):
         '''Apply NORM'''
         vcf_in = inputs
         cores = self.get_stage_options('apply_vt', 'cores')
-        vt_command = "{vt_path} decompose -s {vcf_in} - | {vt_path} normalize -r {reference} - | " \
-                    "{vt_path} uniq - -o {vcf_out}".format(
-                    vt_path=self.vt_path, vcf_in=vcf_in, vt_path=self.vt_path, reference=self.reference,
-                    vt_path=self.vt_path, vcf_out=vcf_out)
+        vt_command = "{vt_path} decompose -s {vcf_in} - | {vt_path2} normalize -r {reference} - | " \
+                    "{vt_path3} uniq - -o {vcf_out}".format(
+                    vt_path=self.vt_path, vcf_in=vcf_in, vt_path2=self.vt_path, reference=self.reference,
+                    vt_path3=self.vt_path, vcf_out=vcf_out)
         run_stage(self.state, 'apply_vt', vt_command)
 
     def apply_vep(self, inputs, vcf_out):
