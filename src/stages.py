@@ -13,6 +13,8 @@ import os
 
 # PICARD_JAR = '$PICARD_HOME/lib/picard-1.69.jar'
 PICARD_JAR = '/vlsci/VR0002/kmahmood/Programs/picard/picard-tools-2.0.1/picard.jar'
+SNPEFF_JAR = '/usr/local/easybuild/software/snpEff/4.1d-Java-1.7.0_80/snpEff.jar'
+
 GATK_JAR = '$GATK_HOME/GenomeAnalysisTK.jar'
 
 def java_command(jar_path, mem_in_gb, command_args):
@@ -50,6 +52,10 @@ class Stages(object):
     def run_picard(self, stage, args):
         mem = int(self.state.config.get_stage_options(stage, 'mem'))
         return run_java(self.state, stage, PICARD_JAR, mem, args)
+
+    def run_snpeff(self, stage, args):
+        mem = int(self.state.config.get_stage_options(stage, 'mem'))
+        return run_java(self.state, stage, SNPEFF_JAR, mem, args)
 
     def run_gatk(self, stage, args):
         mem = int(self.state.config.get_stage_options(stage, 'mem'))
@@ -150,7 +156,7 @@ class Stages(object):
         [csv_in, _log], bam_in = inputs
         gatk_args = "-T PrintReads -R {reference} -I {bam} --BQSR {recal_csv} " \
                     "-o {out} --num_cpu_threads_per_data_thread 4".format(reference=self.reference,
-                                                                          bam=bam_in, recal_csv=csv_in, out=bam_out)
+                                                 bam=bam_in, recal_csv=csv_in, out=bam_out)
         self.run_gatk('print_reads_gatk', gatk_args)
 
     # Merge per lane bam into a single bam per sample
