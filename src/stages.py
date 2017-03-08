@@ -334,7 +334,7 @@ class Stages(object):
         vcf_in = inputs
         cores = self.get_stage_options('apply_bcf', 'cores')
         command = 'bcftools filter -e "ALT='*'" {vcf_in} > {vcf_out}'.format(cores=cores,
-                            vcf_in=vcf_in, bam=vcf_out)
+                            vcf_in=vcf_in, vcf_out=vcf_out)
         run_stage(self.state, 'apply_bcf', command)
 
     def apply_snpeff(self, inputs, vcf_out):
