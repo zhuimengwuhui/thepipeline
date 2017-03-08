@@ -241,15 +241,25 @@ def make_pipeline(state):
         output='.raw.vqsr.vt.vep.vcf')
         .follows('apply_vt'))
 
+    # Apply BCF
+    (pipeline.transform(
+        task_func=stages.apply_bcf,
+        name='apply_bcf',
+        input=output_from('apply_vep'),
+        filter=suffix('.raw.vqsr.vt.vep.vcf'),
+        # add_inputs=add_inputs(['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
+        output='.raw.vqsr.vt.vep.bcf.vcf')
+        .follows('apply_vep'))
+
     # Apply SnpEff
     (pipeline.transform(
         task_func=stages.apply_snpeff,
         name='apply_snpeff',
-        input=output_from('apply_vep'),
-        filter=suffix('.raw.vqsr.vt.vep.vcf'),
+        input=output_from('apply_bcf'),
+        filter=suffix('.raw.vqsr.vt.vep.bcf.vcf'),
         # add_inputs=add_inputs(['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
-        output='.raw.vqsr.vt.vep.snpeff.vcf')
-        .follows('apply_vep'))
+        output='.annotated.vcf')
+        .follows('apply_bcf'))
 
     # Combine variants using GATK
     # (pipeline.transform(
