@@ -184,20 +184,28 @@ def make_pipeline(state):
         filter=suffix('.combined.vcf'),
         output='.raw.vcf')
 
+    # Annotate VCF file using GATK
+    pipeline.transform(
+       task_func=stages.variant_annotator_gatk,
+       name='variant_annotator_gatk',
+       input=output_from('genotype_gvcf_gatk'),
+       filter=suffix('.raw.vcf'),
+       output='.raw.annotate.vcf')
+
     # SNP recalibration using GATK
     pipeline.transform(
         task_func=stages.snp_recalibrate_gatk,
         name='snp_recalibrate_gatk',
-        input=output_from('genotype_gvcf_gatk'),
-        filter=suffix('.raw.vcf'),
+        input=output_from('variant_annotator_gatk'),
+        filter=suffix('.raw.annotate.vcf'),
         output=['.snp_recal', '.snp_tranches', '.snp_plots.R'])
 
     # Apply SNP recalibration using GATK
     (pipeline.transform(
         task_func=stages.apply_snp_recalibrate_gatk,
         name='apply_snp_recalibrate_gatk',
-        input=output_from('genotype_gvcf_gatk'),
-        filter=suffix('.raw.vcf'),
+        input=output_from('variant_annotator_gatk'),
+        filter=suffix('.raw.annotate.vcf'),
         add_inputs=add_inputs(['variants/ALL.snp_recal', 'variants/ALL.snp_tranches']),
         output='.recal_SNP.vcf')
         .follows('snp_recalibrate_gatk'))
@@ -218,17 +226,26 @@ def make_pipeline(state):
         filter=suffix('.recal_SNP.vcf'),
         add_inputs=add_inputs(
             ['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
-        output='.raw.vqsr.vcf')
+        output='.raw.annotate.vqsr.vcf')
+        .follows('indel_recalibrate_gatk'))
+
+    # Apply VariantFiltration using GATK
+    (pipeline.transform(
+        task_func=stages.apply_indel_recalibrate_gatk,
+        name='apply_variant_filtration_gatk',
+        input=output_from('apply_indel_recalibrate_gatk'),
+        filter=suffix('.raw.annotate.vqsr.vcf'),
+        output='.raw.annotate.vqsr.filtered.vcf')
         .follows('indel_recalibrate_gatk'))
 
     # Apply NORM
     (pipeline.transform(
         task_func=stages.apply_vt,
         name='apply_vt',
-        input=output_from('apply_indel_recalibrate_gatk'),
-        filter=suffix('.raw.vqsr.vcf'),
+        input=output_from('apply_variant_filtration_gatk'),
+        filter=suffix('.raw.annotate.vqsr.filtered.vcf'),
         # add_inputs=add_inputs(['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
-        output='.raw.vqsr.vt.vcf')
+        output='.raw.annotate.vqsr.filtered.vt.vcf')
         .follows('apply_indel_recalibrate_gatk'))
 
     # Apply VEP
