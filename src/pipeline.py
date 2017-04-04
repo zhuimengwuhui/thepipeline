@@ -231,7 +231,7 @@ def make_pipeline(state):
 
     # Apply VariantFiltration using GATK
     (pipeline.transform(
-        task_func=stages.apply_indel_recalibrate_gatk,
+        task_func=stages.apply_variant_filtration_gatk,
         name='apply_variant_filtration_gatk',
         input=output_from('apply_indel_recalibrate_gatk'),
         filter=suffix('.raw.annotate.vqsr.vcf'),
@@ -246,7 +246,7 @@ def make_pipeline(state):
         filter=suffix('.raw.annotate.vqsr.filtered.vcf'),
         # add_inputs=add_inputs(['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
         output='.raw.annotate.vqsr.filtered.vt.vcf')
-        .follows('apply_indel_recalibrate_gatk'))
+        .follows('apply_variant_filtration_gatk'))
 
     # Apply VEP
     (pipeline.transform(
