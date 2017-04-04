@@ -236,7 +236,7 @@ def make_pipeline(state):
         input=output_from('apply_indel_recalibrate_gatk'),
         filter=suffix('.raw.annotate.vqsr.vcf'),
         output='.raw.annotate.vqsr.filtered.vcf')
-        .follows('indel_recalibrate_gatk'))
+        .follows('apply_indel_recalibrate_gatk'))
 
     # Apply NORM
     (pipeline.transform(
@@ -253,9 +253,9 @@ def make_pipeline(state):
         task_func=stages.apply_vep,
         name='apply_vep',
         input=output_from('apply_vt'),
-        filter=suffix('.raw.vqsr.vt.vcf'),
+        filter=suffix('.raw.annotate.vqsr.filtered.vt.vcf'),
         # add_inputs=add_inputs(['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
-        output='.raw.vqsr.vt.vep.vcf')
+        output='.vep.vcf')
         .follows('apply_vt'))
 
     # Apply BCF
@@ -263,9 +263,9 @@ def make_pipeline(state):
         task_func=stages.apply_bcf,
         name='apply_bcf',
         input=output_from('apply_vep'),
-        filter=suffix('.raw.vqsr.vt.vep.vcf'),
+        filter=suffix('.vep.vcf'),
         # add_inputs=add_inputs(['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
-        output='.raw.vqsr.vt.vep.bcf.vcf')
+        output='.vep.bcf.vcf')
         .follows('apply_vep'))
 
     # Apply SnpEff
@@ -273,7 +273,7 @@ def make_pipeline(state):
         task_func=stages.apply_snpeff,
         name='apply_snpeff',
         input=output_from('apply_bcf'),
-        filter=suffix('.raw.vqsr.vt.vep.bcf.vcf'),
+        filter=suffix('.vep.bcf.vcf'),
         # add_inputs=add_inputs(['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
         output='.annotated.vcf')
         .follows('apply_bcf'))
