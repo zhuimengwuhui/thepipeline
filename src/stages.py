@@ -318,7 +318,7 @@ class Stages(object):
                     "--filterExpression \"HRun > 8.0\" --filterName \"HRun8\" " \
                     "--clusterWindowSize 30 " \
                     "--clusterSize 3 " \
-                    "-input {vcf_in} -o {vcf_out}".format(reference=self.reference,
+                    "--variant {vcf_in} -o {vcf_out}".format(reference=self.reference,
                                                       cores=cores, vcf_in=vcf_in, vcf_out=vcf_out)
         self.run_gatk('apply_variant_filtration_gatk', gatk_args)
 
