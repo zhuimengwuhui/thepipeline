@@ -309,7 +309,7 @@ class Stages(object):
         vcf_in = inputs
         cores = self.get_stage_options('apply_variant_filtration_gatk', 'cores')
         gatk_args = "-T VariantFiltration --disable_auto_index_creation_and_locking_when_reading_rods " \
-                    "-R {reference} --num_threads {cores} " \
+                    "-R {reference} " \
                     "--filterExpression \"QUAL < 30.0\" --filterName \"VeryLowQual\" " \
                     "--filterExpression \"QD < 2.0\" --filterName \"LowQD\" " \
                     "--filterExpression \"DP < 10\" --filterName \"LowCoverage\" " \
