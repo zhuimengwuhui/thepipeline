@@ -334,6 +334,8 @@ class Stages(object):
                     "--filterExpression \"MQ < 40\" --filterName \"LowMappingQual\" " \
                     "--filterExpression \"SOR > 4.0\" --filterName \"StrandBias\" " \
                     "--filterExpression \"HRun > 12.0\" --filterName \"HRun12\" " \
+                    "--filterExpression \"MQRankSum < 12.0\" --filterName \"MQRankSum\" " \
+                    "--filterExpression \"ReadPosRankSum < -8.0\" --filterName \"ReadPosRankSum\" " \
                     "--variant {vcf_in} -o {vcf_out}".format(reference=self.reference,
                                                       cores=cores, vcf_in=vcf_in, vcf_out=vcf_out)
         self.run_gatk('apply_variant_filtration_gatk_lenient', gatk_args)
