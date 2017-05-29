@@ -325,7 +325,7 @@ class Stages(object):
     def apply_variant_filtration_gatk_lenient(self, inputs, vcf_out):
         '''Apply Variant Filtration using gatk'''
         vcf_in = inputs
-        cores = self.get_stage_options('apply_variant_filtration_gatk', 'cores')
+        cores = self.get_stage_options('apply_variant_filtration_gatk_lenient', 'cores')
         gatk_args = "-T VariantFiltration --disable_auto_index_creation_and_locking_when_reading_rods " \
                     "-R {reference} " \
                     "--filterExpression \"QUAL < 30.0\" --filterName \"VeryLowQual\" " \
@@ -335,7 +335,7 @@ class Stages(object):
                     "--filterExpression \"SOR > 4.0\" --filterName \"StrandBias\" " \
                     "--variant {vcf_in} -o {vcf_out}".format(reference=self.reference,
                                                       cores=cores, vcf_in=vcf_in, vcf_out=vcf_out)
-        self.run_gatk('apply_variant_filtration_gatk', gatk_args)
+        self.run_gatk('apply_variant_filtration_gatk_lenient', gatk_args)
 
     def apply_vt(self, inputs, vcf_out):
         '''Apply NORM'''
