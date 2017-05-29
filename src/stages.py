@@ -322,6 +322,21 @@ class Stages(object):
                                                       cores=cores, vcf_in=vcf_in, vcf_out=vcf_out)
         self.run_gatk('apply_variant_filtration_gatk', gatk_args)
 
+    def apply_variant_filtration_gatk_lenient(self, inputs, vcf_out):
+        '''Apply Variant Filtration using gatk'''
+        vcf_in = inputs
+        cores = self.get_stage_options('apply_variant_filtration_gatk', 'cores')
+        gatk_args = "-T VariantFiltration --disable_auto_index_creation_and_locking_when_reading_rods " \
+                    "-R {reference} " \
+                    "--filterExpression \"QUAL < 30.0\" --filterName \"VeryLowQual\" " \
+                    "--filterExpression \"QD < 2.0\" --filterName \"LowQD\" " \
+                    "--filterExpression \"DP < 10\" --filterName \"LowCoverage\" " \
+                    "--filterExpression \"MQ < 40\" --filterName \"LowMappingQual\" " \
+                    "--filterExpression \"SOR > 4.0\" --filterName \"StrandBias\" " \
+                    "--variant {vcf_in} -o {vcf_out}".format(reference=self.reference,
+                                                      cores=cores, vcf_in=vcf_in, vcf_out=vcf_out)
+        self.run_gatk('apply_variant_filtration_gatk', gatk_args)
+
     def apply_vt(self, inputs, vcf_out):
         '''Apply NORM'''
         vcf_in = inputs
