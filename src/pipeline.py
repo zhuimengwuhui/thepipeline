@@ -235,7 +235,7 @@ def make_pipeline(state):
         name='apply_variant_filtration_gatk_lenient',
         input=output_from('apply_indel_recalibrate_gatk'),
         filter=suffix('.raw.annotate.vqsr.vcf'),
-        output='.raw.annotate.vqsr.filtered.vcf')
+        output='.raw.annotate.vqsr.filtered_lenient.vcf')
         .follows('apply_indel_recalibrate_gatk'))
 
     # Apply NORM
@@ -243,7 +243,7 @@ def make_pipeline(state):
         task_func=stages.apply_vt,
         name='apply_vt',
         input=output_from('apply_variant_filtration_gatk_lenient'),
-        filter=suffix('.raw.annotate.vqsr.filtered.vcf'),
+        filter=suffix('.raw.annotate.vqsr.filtered_lenient.vcf'),
         # add_inputs=add_inputs(['variants/ALL.indel_recal', 'variants/ALL.indel_tranches']),
         output='.raw.annotate.vqsr.filtered.vt.vcf')
         .follows('apply_variant_filtration_gatk_lenient'))
