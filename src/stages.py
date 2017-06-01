@@ -142,7 +142,7 @@ class Stages(object):
         csv_out, log_out = outputs
         cores = self.get_stage_options('base_recalibration_gatk', 'cores')
         gatk_args = "-T BaseRecalibrator -R {reference} -I {bam} " \
-                    "-nct {cores}" \
+                    "-nct {cores} " \
                     "--num_cpu_threads_per_data_thread 4 --knownSites {dbsnp_hg19} " \
                     "--knownSites {mills_hg19} --knownSites {one_k_g_indels} " \
                     "-log {log} -o {out}".format(reference=self.reference, bam=bam_in, cores=cores,
