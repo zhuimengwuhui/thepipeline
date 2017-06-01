@@ -142,8 +142,7 @@ class Stages(object):
         csv_out, log_out = outputs
         cores = self.get_stage_options('base_recalibration_gatk', 'cores')
         gatk_args = "-T BaseRecalibrator -R {reference} -I {bam} " \
-                    "-nct {cores} " \
-                    "--num_cpu_threads_per_data_thread 4 --knownSites {dbsnp_hg19} " \
+                    "--num_cpu_threads_per_data_thread {cores} --knownSites {dbsnp_hg19} " \
                     "--knownSites {mills_hg19} --knownSites {one_k_g_indels} " \
                     "-log {log} -o {out}".format(reference=self.reference, bam=bam_in, cores=cores,
                                                  mills_hg19=self.mills_hg19, dbsnp_hg19=self.dbsnp_hg19,
@@ -156,9 +155,10 @@ class Stages(object):
     def print_reads_gatk(self, inputs, bam_out):
         '''Print reads using GATK'''
         [csv_in, _log], bam_in = inputs
+        cores = self.get_stage_options('print_reads_gatk', 'cores')
         gatk_args = "-T PrintReads -R {reference} -I {bam} --BQSR {recal_csv} " \
-                    "-o {out} --num_cpu_threads_per_data_thread 4".format(reference=self.reference,
-                                                 bam=bam_in, recal_csv=csv_in, out=bam_out)
+                    "-o {out} --num_cpu_threads_per_data_thread {cores}".format(reference=self.reference,
+                                                 cores=cores, bam=bam_in, recal_csv=csv_in, out=bam_out)
         self.run_gatk('print_reads_gatk', gatk_args)
 
     # Merge per lane bam into a single bam per sample
