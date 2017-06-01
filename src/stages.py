@@ -140,6 +140,7 @@ class Stages(object):
     def base_recalibration_gatk(self, bam_in, outputs):
         '''Base recalibration using GATK'''
         csv_out, log_out = outputs
+        cores = self.get_stage_options('base_recalibration_gatk', 'cores')
         gatk_args = "-T BaseRecalibrator -R {reference} -I {bam} " \
                     "-nct {cores}" \
                     "--num_cpu_threads_per_data_thread 4 --knownSites {dbsnp_hg19} " \
