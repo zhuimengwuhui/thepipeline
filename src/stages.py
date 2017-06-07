@@ -336,7 +336,7 @@ class Stages(object):
                     "--filterExpression \"MQ < 40\" --filterName \"LowMappingQual\" " \
                     "--filterExpression \"SOR > 4.0\" --filterName \"StrandBias\" " \
                     "--filterExpression \"HRun > 12.0\" --filterName \"HRun12\" " \
-                    "--filterExpression \"MQRankSum < 12.0\" --filterName \"MQRankSum\" " \
+                    "--filterExpression \"MQRankSum < -12.5\" --filterName \"MQRankSum\" " \
                     "--filterExpression \"ReadPosRankSum < -8.0\" --filterName \"ReadPosRankSum\" " \
                     "--clusterWindowSize 15 " \
                     "--clusterSize 2 " \
