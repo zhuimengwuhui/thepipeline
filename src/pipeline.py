@@ -278,6 +278,14 @@ def make_pipeline(state):
         output='.annotated.vcf')
         .follows('apply_bcf'))
 
+    pipeline.transform(
+        task_func=stages.apply_gridss,
+        name='apply_gridss',
+        input=output_from('merge_sample_bams'),
+        filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).merged.bam'),
+        extras=['{sample[0]}'],
+        output='svariants/{sample[0]}/{sample[0]}.merged.sv.vcf')
+
     # Combine variants using GATK
     # (pipeline.transform(
     #     task_func=stages.combine_variants_gatk,

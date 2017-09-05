@@ -14,6 +14,7 @@ import os
 # PICARD_JAR = '$PICARD_HOME/lib/picard-1.69.jar'
 PICARD_JAR = '/vlsci/VR0002/kmahmood/Programs/picard/picard-tools-2.0.1/picard.jar'
 SNPEFF_JAR = '/usr/local/easybuild/software/snpEff/4.1d-Java-1.7.0_80/snpEff.jar'
+GRIDSS_JAR = '/vlsci/VR0002/kmahmood/Programs/gridss/gridss-1.3.4-jar-with-dependencies.jar'
 
 GATK_JAR = '$GATK_HOME/GenomeAnalysisTK.jar'
 
@@ -25,11 +26,29 @@ def java_command(jar_path, mem_in_gb, command_args):
     return 'java -Xmx{mem}g -jar {jar_path} {command_args}'.format(
         jar_path=jar_path, mem=java_mem, command_args=command_args)
 
+def java_command_gridss(jar_path, mem_in_gb, command_args):
+    '''Build a string for running a java command'''
+    # Bit of room between Java's max heap memory and what was requested.
+    # Allows for other Java memory usage, such as stack.
+    java_mem = mem_in_gb - 2
+    command = "java -ea -Xmx{mem}g "\
+    	"-Dsamjdk.create_index=true "\
+    	"-Dsamjdk.use_async_io_read_samtools=true " \
+	    "-Dsamjdk.use_async_io_write_samtools=true " \
+	    "-Dsamjdk.use_async_io_write_tribble=true " \
+	    "-Dsamjdk.compression_level=1 " \
+	    "-cp {jar_path} gridss.CallVariants " \
+	    "TMP_DIR=. " \
+	    "WORKING_DIR=. {command_args}".format(jar_path=jar_path, mem=java_mem, command_args=command_args)
+    return command
 
 def run_java(state, stage, jar_path, mem, args):
     command = java_command(jar_path, mem, args)
     run_stage(state, stage, command)
 
+def run_java_gridss(state, stage, jar_path, mem, args):
+    command = java_command_gridss(jar_path, mem, args)
+    run_stage(state, stage, command)
 
 class Stages(object):
     def __init__(self, state):
@@ -46,6 +65,7 @@ class Stages(object):
         self.snpeff_conf = self.get_options('snpeff_conf')
         self.vep_path = self.get_options('vep_path')
         self.vt_path = self.get_options('vt_path')
+        self.blacklist = self.get_options('blacklist')
         # self.GBR_mergeGvcf = self.get_options('GBR_mergeGvcf')
         # self.FIN_mergeGvcf = self.get_options('FIN_mergeGvcf')
 
@@ -56,6 +76,10 @@ class Stages(object):
     def run_snpeff(self, stage, args):
         mem = int(self.state.config.get_stage_options(stage, 'mem'))
         return run_java(self.state, stage, SNPEFF_JAR, mem, args)
+
+    def run_gridss(self, stage, args):
+        mem = int(self.state.config.get_stage_options(stage, 'mem'))
+        return run_java_gridss(self.state, stage, GRIDSS_JAR, mem, args)
 
     def run_gatk(self, stage, args):
         mem = int(self.state.config.get_stage_options(stage, 'mem'))
@@ -383,6 +407,20 @@ class Stages(object):
                     snpeff_conf=self.snpeff_conf, vcf_in=vcf_in, vcf_out=vcf_out)
         self.run_snpeff('apply_snpeff', snpeff_command)
         #run_snpeff(self.state, 'apply_snpeff', snpeff_command)
+
+    def apply_gridss(self, inputs, vcf_out, sample_id):
+        '''Apply GRIDSS'''
+        input_bam = inputs
+        #cores = self.get_stage_options('apply_snpeff', 'cores')
+        safe_make_dir('svariants')
+        safe_make_dir('svariants/{sample}'.format(sample=sample_id))
+        assembly = sample_id + ".merged.gridss.assembly.bam"
+        gridss_command = "REFERENCE_SEQUENCE=\"{reference}\" " \
+                "INPUT=\"{input_bam}\" OUTPUT=\"{vcf_out}\" ASSEMBLY=\"{assembly}\" " \
+	            "BLACKLIST=\"{blacklist}\"".format(
+                    reference=self.reference, input_bam=input_bam, vcf_out=vcf_out,
+                    assembly=assembly,blacklist=self.blacklist)
+        self.run_gridss('apply_gridss', gridss_command)
 
     # def combine_variants_gatk(self, inputs, vcf_out):
     #     '''Combine variants using GATK'''
