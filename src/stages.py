@@ -452,7 +452,7 @@ class Stages(object):
         #safe_make_dir('delly')
         #assembly = sample_id + ".merged.gridss.assembly.bam"
         delly_command = "{delly} call -t DEL -g {reference} -v {input_bcf} -o {bcf_out} -x {blacklist} {bam}".format(
-                    delly=self.delly, self.reference=reference, input_bcf=input_bcf, blacklist=self.blacklist,
+                    delly=self.delly, reference=self.reference, input_bcf=input_bcf, blacklist=self.blacklist,
                     bam=bam)
         self.run_stage(self.state, 'apply_delly_del_merge', delly_command)
 
