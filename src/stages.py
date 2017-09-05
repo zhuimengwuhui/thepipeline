@@ -14,7 +14,7 @@ import os
 # PICARD_JAR = '$PICARD_HOME/lib/picard-1.69.jar'
 PICARD_JAR = '/vlsci/VR0002/kmahmood/Programs/picard/picard-tools-2.0.1/picard.jar'
 SNPEFF_JAR = '/usr/local/easybuild/software/snpEff/4.1d-Java-1.7.0_80/snpEff.jar'
-GRIDSS_JAR = '/vlsci/VR0002/kmahmood/Programs/gridss/gridss-1.3.4-jar-with-dependencies.jar'
+GRIDSS_JAR = '/vlsci/VR0002/kmahmood/Programs/gridss/gridss-1.4.3-jar-with-dependencies.jar'
 
 GATK_JAR = '$GATK_HOME/GenomeAnalysisTK.jar'
 
@@ -66,6 +66,7 @@ class Stages(object):
         self.vep_path = self.get_options('vep_path')
         self.vt_path = self.get_options('vt_path')
         self.blacklist = self.get_options('blacklist')
+        self.delly = self.get_options('delly')
         # self.GBR_mergeGvcf = self.get_options('GBR_mergeGvcf')
         # self.FIN_mergeGvcf = self.get_options('FIN_mergeGvcf')
 
@@ -414,13 +415,25 @@ class Stages(object):
         #cores = self.get_stage_options('apply_snpeff', 'cores')
         safe_make_dir('svariants')
         safe_make_dir('svariants/{sample}'.format(sample=sample_id))
-        assembly = sample_id + ".merged.gridss.assembly.bam"
+        assembly = sample_id + ".gridss.assembly.bam"
         gridss_command = "REFERENCE_SEQUENCE=\"{reference}\" " \
                 "INPUT=\"{input_bam}\" OUTPUT=\"{vcf_out}\" ASSEMBLY=\"{assembly}\" " \
 	            "BLACKLIST=\"{blacklist}\"".format(
                     reference=self.reference, input_bam=input_bam, vcf_out=vcf_out,
                     assembly=assembly,blacklist=self.blacklist)
         self.run_gridss('apply_gridss', gridss_command)
+
+    def apply_delly_del_call(self, inputs, bcf_out, sample_id):
+        '''Apply DELLY CALL'''
+        input_bam = inputs
+        #cores = self.get_stage_options('apply_snpeff', 'cores')
+        safe_make_dir('delly')
+        safe_make_dir('delly/{sample}'.format(sample=sample_id))
+        #assembly = sample_id + ".merged.gridss.assembly.bam"
+        delly_command = "{delly} call -t DEL -g {reference} -o {bcf_out} -x {blacklist} {input_bam}".format(
+                    delly=self.delly, reference=self.reference, input_bam=input_bam, bcf_out=bcf_out,
+                    blacklist=self.blacklist)
+        self.run_stage(self.state, 'apply_delly_call', delly_command)
 
     # def combine_variants_gatk(self, inputs, vcf_out):
     #     '''Combine variants using GATK'''

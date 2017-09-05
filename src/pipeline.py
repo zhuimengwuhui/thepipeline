@@ -286,24 +286,36 @@ def make_pipeline(state):
         extras=['{sample[0]}'],
         output='svariants/{sample[0]}/{sample[0]}.merged.sv.vcf')
 
-    # Combine variants using GATK
-    # (pipeline.transform(
-    #     task_func=stages.combine_variants_gatk,
-    #     name='combine_variants_gatk',
-    #     input=output_from('apply_snp_recalibrate_gatk'),
-    #     filter=suffix('.recal_SNP.vcf'),
-    #     add_inputs=add_inputs(['ALL.recal_INDEL.vcf']),
-    #     # output='.combined.vcf')
-    #     output='ALL.raw.vqsr.vcf')
-    #     .follows('apply_indel_recalibrate_gatk'))
+    # Call DELs with DELLY
+    pipeline.merge(
+        task_func=stages.deletions_delly,
+        name='apply_delly_del_call',
+        input=output_from('merge_sample_bams'),
+        filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).merged.bam'),
+        extras=['{sample[0]}'],
+        output='svariants/{sample[0]}/{sample[0]}.delly.DEL.bcf')
+
+    # # Call DUPs with DELLY
+    # pipeline.merge(
+    #     task_func=stages.duplications_delly,
+    #     name='duplications_delly',
+    #     input=output_from('sort_alignment'),
+    #     output='delly.DUP.vcf')
     #
-    # # Select variants using GATK
-    # pipeline.transform(
-    #     task_func=stages.select_variants_gatk,
-    #     name='select_variants_gatk',
-    #     input=output_from('combine_variants_gatk'),
-    #     filter=suffix('.combined.vcf'),
-    #     output='.selected.vcf')
+    # # Call INVs with DELLY
+    # pipeline.merge(
+    #     task_func=stages.inversions_delly,
+    #     name='inversions_delly',
+    #     input=output_from('sort_alignment'),
+    #     output='delly.INV.vcf')
+    #
+    # # Call TRAs with DELLY
+    # pipeline.merge(
+    #     task_func=stages.translocations_delly,
+    #     name='translocations_delly',
+    #     input=output_from('sort_alignment'),
+    #     output='delly.TRA.vcf')
+
 
 
     return pipeline
