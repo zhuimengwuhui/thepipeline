@@ -284,16 +284,24 @@ def make_pipeline(state):
         input=output_from('merge_sample_bams'),
         filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).merged.bam'),
         extras=['{sample[0]}'],
-        output='svariants/{sample[0]}/{sample[0]}.merged.sv.vcf')
+        output='svariants/{sample[0]}/{sample[0]}.gridss.sv.vcf')
 
     # Call DELs with DELLY
-    pipeline.merge(
-        task_func=stages.deletions_delly,
+    pipeline.transform(
+        task_func=stages.apply_delly_del_call,
         name='apply_delly_del_call',
         input=output_from('merge_sample_bams'),
         filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).merged.bam'),
         extras=['{sample[0]}'],
         output='svariants/{sample[0]}/{sample[0]}.delly.DEL.bcf')
+
+    pipeline.merge(
+        task_func=stages.apply_delly_del_merge,
+        name='apply_delly_del_merge',
+        input=output_from('apply_delly_del_call'),
+        # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).delly.DEL.bcf'),
+        output='svariants/delly.DEL.bcf')
+
 
     # # Call DUPs with DELLY
     # pipeline.merge(

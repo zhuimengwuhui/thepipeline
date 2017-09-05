@@ -435,6 +435,16 @@ class Stages(object):
                     blacklist=self.blacklist)
         self.run_stage(self.state, 'apply_delly_call', delly_command)
 
+    def apply_delly_del_merge(self, inputs, bcf_out):
+        '''Apply DELLY CALL'''
+        bcfs_args = ' '.join(inputs)
+        #cores = self.get_stage_options('apply_snpeff', 'cores')
+        #safe_make_dir('delly')
+        #assembly = sample_id + ".merged.gridss.assembly.bam"
+        delly_command = "{delly} merge -t DEL -m 500 -n 1000000 -o {bcf_out} -b 500 -r 0.5 {bcfs}".format(
+                    delly=self.delly, bcf_out=bcf_out, bcfs=self.bcfs_args)
+        self.run_stage(self.state, 'apply_delly_del_merge', delly_command)
+
     # def combine_variants_gatk(self, inputs, vcf_out):
     #     '''Combine variants using GATK'''
     #     recal_snp, [recal_indel] = inputs
