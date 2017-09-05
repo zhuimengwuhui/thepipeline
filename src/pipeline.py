@@ -302,6 +302,31 @@ def make_pipeline(state):
         # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).delly.DEL.bcf'),
         output='svariants/delly.DEL.bcf')
 
+    (pipeline.transform(
+        task_func=stages.apply_delly_del_regen,
+        name='apply_delly_del_regen',
+        input=output_from('merge_sample_bams'),
+        filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).merged.bam'),
+        extras=['{sample[0]}'],
+        output='svariants/{sample[0]}/{sample[0]}.delly.DEL2.bcf')
+        add_inputs=add_inputs(
+            ['svariants/delly.DEL.bcf']),
+        .follows('apply_delly_del_merge'))
+
+    pipeline.merge(
+        task_func=stages.apply_delly_del_regen_merge,
+        name='apply_delly_del_regen_merge',
+        input=output_from('apply_delly_del_regen'),
+        # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).delly.DEL.bcf'),
+        output='svariants/merged.DEL.bcf')
+
+    pipeline.merge(
+        task_func=stages.apply_delly_del_regen_merge_filter,
+        name='apply_delly_del_regen_merge_filter',
+        input=output_from('apply_delly_del_regen_merge'),
+        # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).delly.DEL.bcf'),
+        output='svariants/germline.DEL.bcf')
+
 
     # # Call DUPs with DELLY
     # pipeline.merge(

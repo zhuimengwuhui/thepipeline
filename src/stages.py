@@ -436,14 +436,45 @@ class Stages(object):
         self.run_stage(self.state, 'apply_delly_call', delly_command)
 
     def apply_delly_del_merge(self, inputs, bcf_out):
-        '''Apply DELLY CALL'''
+        '''Apply DELLY Merge'''
         bcfs_args = ' '.join(inputs)
         #cores = self.get_stage_options('apply_snpeff', 'cores')
         #safe_make_dir('delly')
         #assembly = sample_id + ".merged.gridss.assembly.bam"
-        delly_command = "{delly} merge -t DEL -m 500 -n 1000000 -o {bcf_out} -b 500 -r 0.5 {bcfs}".format(
-                    delly=self.delly, bcf_out=bcf_out, bcfs=self.bcfs_args)
+        delly_command = "{delly} call -t DEL -g {reference} -v del.bcf -o s1.geno.bcf -x hg19.excl s1.bam".format(
+                    delly=self.delly, self.reference=reference, bcf_out=bcf_out, bcfs=self.bcfs_args)
         self.run_stage(self.state, 'apply_delly_del_merge', delly_command)
+
+    def apply_delly_del_regen(self, inputs, bcf_out):
+        '''Apply DELLY Re-genotype'''
+        bam, [input_bcf] = inputs
+        #cores = self.get_stage_options('apply_snpeff', 'cores')
+        #safe_make_dir('delly')
+        #assembly = sample_id + ".merged.gridss.assembly.bam"
+        delly_command = "{delly} call -t DEL -g {reference} -v {input_bcf} -o {bcf_out} -x {blacklist} {bam}".format(
+                    delly=self.delly, self.reference=reference, input_bcf=input_bcf, blacklist=self.blacklist,
+                    bam=bam)
+        self.run_stage(self.state, 'apply_delly_del_merge', delly_command)
+
+    def apply_delly_del_regen_merge(self, inputs, bcf_out):
+        '''Apply DELLY Re-genotype merge'''
+        bcfs_args = ' '.join(inputs)
+        #cores = self.get_stage_options('apply_snpeff', 'cores')
+        #safe_make_dir('delly')
+        #assembly = sample_id + ".merged.gridss.assembly.bam"
+        command = "bcftools merge -m id -O b -o {vcf_in} {bcfs_args}".format(bcfs_args=bcfs_args,
+                vcf_in=vcf_in)
+        run_stage(self.state, 'apply_delly_del_regen_merge', command)
+
+    def apply_delly_del_regen_merge_filter(self, inputs, bcf_out):
+        '''Apply DELLY germline'''
+        #bcfs_args = ' '.join(inputs)
+        #cores = self.get_stage_options('apply_snpeff', 'cores')
+        #safe_make_dir('delly')
+        #assembly = sample_id + ".merged.gridss.assembly.bam"
+        command = "{delly} filter -t DEL -f germline -o {bcf_out} {inputs}".format(inputs=inputs,
+                bcf_out=bcf_out)
+        run_stage(self.state, 'apply_delly_del_regen_merge', command)
 
     # def combine_variants_gatk(self, inputs, vcf_out):
     #     '''Combine variants using GATK'''
