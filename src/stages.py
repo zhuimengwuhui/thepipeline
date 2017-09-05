@@ -474,7 +474,7 @@ class Stages(object):
         #assembly = sample_id + ".merged.gridss.assembly.bam"
         command = "{delly} filter -t DEL -f germline -o {bcf_out} {inputs}".format(inputs=inputs,
                 bcf_out=bcf_out)
-        run_stage(self.state, 'apply_delly_del_regen_merge', command)
+        run_stage(self.state, 'apply_delly_del_regen_merge_filter', command)
 
     # def combine_variants_gatk(self, inputs, vcf_out):
     #     '''Combine variants using GATK'''
