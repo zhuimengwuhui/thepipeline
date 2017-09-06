@@ -466,7 +466,7 @@ class Stages(object):
                 vcf_in=vcf_in)
         run_stage(self.state, 'apply_delly_del_regen_merge', command)
 
-    def apply_delly_del_regen_merge_filter(self, inputs, bcf_out):
+    def apply_delly_del_filter(self, inputs, bcf_out):
         '''Apply DELLY germline'''
         #bcfs_args = ' '.join(inputs)
         #cores = self.get_stage_options('apply_snpeff', 'cores')
@@ -474,7 +474,7 @@ class Stages(object):
         #assembly = sample_id + ".merged.gridss.assembly.bam"
         command = "{delly} filter -t DEL -f germline -o {bcf_out} {inputs}".format(inputs=inputs,
                 bcf_out=bcf_out)
-        run_stage(self.state, 'apply_delly_del_regen_merge_filter', command)
+        run_stage(self.state, 'apply_delly_del_filter', command)
 
     # def combine_variants_gatk(self, inputs, vcf_out):
     #     '''Combine variants using GATK'''
