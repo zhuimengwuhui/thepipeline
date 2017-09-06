@@ -433,7 +433,7 @@ class Stages(object):
         delly_command = "{delly} call -t DEL -g {reference} -o {bcf_out} -x {blacklist} {input_bam}".format(
                     delly=self.delly, reference=self.reference, input_bam=input_bam, bcf_out=bcf_out,
                     blacklist=self.blacklist)
-        self.run_stage(self.state, 'apply_delly_call', delly_command)
+        run_stage(self.state, 'apply_delly_call', delly_command)
 
     def apply_delly_del_merge(self, inputs, bcf_out):
         '''Apply DELLY Merge'''
@@ -443,7 +443,7 @@ class Stages(object):
         #assembly = sample_id + ".merged.gridss.assembly.bam"
         delly_command = "{delly} call -t DEL -g {reference} -v del.bcf -o s1.geno.bcf -x hg19.excl s1.bam".format(
                     delly=self.delly, reference=self.reference, bcf_out=bcf_out, bcfs=self.bcfs_args)
-        self.run_stage(self.state, 'apply_delly_del_merge', delly_command)
+        run_stage(self.state, 'apply_delly_del_merge', delly_command)
 
     def apply_delly_del_regen(self, inputs, bcf_out):
         '''Apply DELLY Re-genotype'''
@@ -454,7 +454,7 @@ class Stages(object):
         delly_command = "{delly} call -t DEL -g {reference} -v {input_bcf} -o {bcf_out} -x {blacklist} {bam}".format(
                     delly=self.delly, reference=self.reference, input_bcf=input_bcf, blacklist=self.blacklist,
                     bam=bam)
-        self.run_stage(self.state, 'apply_delly_del_merge', delly_command)
+        run_stage(self.state, 'apply_delly_del_merge', delly_command)
 
     def apply_delly_del_regen_merge(self, inputs, bcf_out):
         '''Apply DELLY Re-genotype merge'''
