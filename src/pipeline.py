@@ -306,8 +306,8 @@ def make_pipeline(state):
         .follows('apply_delly_del_merge'))
 
     pipeline.merge(
-        task_func=stages.apply_delly_del_merge,
-        name='apply_delly_del_merge',
+        task_func=stages.apply_delly_del_regen_merge,
+        name='apply_delly_del_regen_merge',
         input=output_from('apply_delly_del_regen'),
         # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).delly.DEL.bcf'),
         output='delly/merged.DEL.bcf')
