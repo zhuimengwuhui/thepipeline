@@ -447,7 +447,7 @@ class Stages(object):
 
     def apply_delly_del_regen(self, inputs, output_bcf, bcf_out):
         '''Apply DELLY Re-genotype'''
-        bam, bcf_merged_out = inputs
+        bam, [bcf_merged_out] = inputs
         # input_bcf = input_bcf
         #cores = self.get_stage_options('apply_snpeff', 'cores')
         #safe_make_dir('delly')
