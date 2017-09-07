@@ -474,8 +474,7 @@ class Stages(object):
         #cores = self.get_stage_options('apply_snpeff', 'cores')
         #safe_make_dir('delly')
         #assembly = sample_id + ".merged.gridss.assembly.bam"
-        command = "bcftools index -o {bcf_out} {bcf}".format(bcf=bcf,
-                bcf_out=bcf_out)
+        command = "bcftools index {bcf}".format(bcf=bcf)
         run_stage(self.state, 'apply_index_bcf_file', command)
 
     def apply_delly_del_filter(self, inputs, bcf_out):
