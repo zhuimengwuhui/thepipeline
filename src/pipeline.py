@@ -315,7 +315,7 @@ def make_pipeline(state):
     pipeline.merge(
         task_func=stages.apply_delly_del_filter,
         name='apply_delly_del_filter',
-        input=output_from('apply_delly_del_merge'),
+        input=output_from('apply_delly_del_regen_merge'),
         # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).delly.DEL.bcf'),
         output='delly/germline.DEL.bcf')
 
