@@ -445,15 +445,15 @@ class Stages(object):
                     delly=self.delly, bcf_out=bcf_out, bcfs=bcfs_args)
         run_stage(self.state, 'apply_delly_del_merge', delly_command)
 
-    def apply_delly_del_regen(self, inputs, input_bcf, bcf_out):
+    def apply_delly_del_regen(self, inputs, output_bcf, bcf_out):
         '''Apply DELLY Re-genotype'''
-        bam = inputs
-        input_bcf = input_bcf
+        bam, bcf_merged_out = inputs
+        # input_bcf = input_bcf
         #cores = self.get_stage_options('apply_snpeff', 'cores')
         #safe_make_dir('delly')
         #assembly = sample_id + ".merged.gridss.assembly.bam"
-        delly_command = "{delly} call -t DEL -g {reference} -v {input_bcf} -o {bcf_out} -x {blacklist} {bam}".format(
-                    delly=self.delly, reference=self.reference, input_bcf=input_bcf, bcf_out=bcf_out, blacklist=self.blacklist,
+        delly_command = "{delly} call -t DEL -g {reference} -v {bcf_merged_out} -o {output_bcf} -x {blacklist} {bam}".format(
+                    delly=self.delly, reference=self.reference, bcf_merged_out=bcf_merged_out, output_bcf=output_bcf, blacklist=self.blacklist,
                     bam=bam)
         run_stage(self.state, 'apply_delly_del_regen', delly_command)
 
