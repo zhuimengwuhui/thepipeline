@@ -472,7 +472,7 @@ class Stages(object):
         #cores = self.get_stage_options('apply_snpeff', 'cores')
         #safe_make_dir('delly')
         #assembly = sample_id + ".merged.gridss.assembly.bam"
-        command = "{delly} filter -t DEL -f germline -o {bcf_out} {inputs}".format(inputs=inputs,
+        command = "{delly} filter -t DEL -f germline -o {bcf_out} {inputs}".format(delly=self.delly, inputs=inputs,
                 bcf_out=bcf_out)
         run_stage(self.state, 'apply_delly_del_filter', command)
 
