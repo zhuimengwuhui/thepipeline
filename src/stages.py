@@ -468,6 +468,16 @@ class Stages(object):
                 bcf_out=bcf_out)
         run_stage(self.state, 'apply_delly_del_regen_merge', command)
 
+    def apply_index_bcf_file(self, inputs, bcf_out):
+        '''Apply DELLY Re-genotype merge'''
+        bcf = inputs
+        #cores = self.get_stage_options('apply_snpeff', 'cores')
+        #safe_make_dir('delly')
+        #assembly = sample_id + ".merged.gridss.assembly.bam"
+        command = "bcftools index -o {bcf_out} {bcf}".format(bcf=bcf,
+                bcf_out=bcf_out)
+        run_stage(self.state, 'apply_index_bcf_file', command)
+
     def apply_delly_del_filter(self, inputs, bcf_out):
         '''Apply DELLY germline'''
         #bcfs_args = ' '.join(inputs)
