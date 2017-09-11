@@ -488,7 +488,7 @@ class Stages(object):
         run_stage(self.state, 'apply_delly_del_filter', command)
 
         ##### DELLY ###### INV
-        def apply_delly_del_call(self, inputs, bcf_out, sample_id):
+        def apply_delly_inv_call(self, inputs, bcf_out, sample_id):
             '''Apply DELLY CALL'''
             input_bam = inputs
             #cores = self.get_stage_options('apply_snpeff', 'cores')
@@ -500,7 +500,7 @@ class Stages(object):
                         blacklist=self.blacklist)
             run_stage(self.state, 'apply_delly_del_call', delly_command)
 
-        def apply_delly_del_merge(self, inputs, bcf_out):
+        def apply_delly_inv_merge(self, inputs, bcf_out):
             '''Apply DELLY Merge'''
             bcfs_args = ' '.join(inputs)
             #cores = self.get_stage_options('apply_snpeff', 'cores')
@@ -510,7 +510,7 @@ class Stages(object):
                         delly=self.delly, bcf_out=bcf_out, bcfs=bcfs_args)
             run_stage(self.state, 'apply_delly_del_merge', delly_command)
 
-        def apply_delly_del_regen(self, inputs, output_bcf, bcf_out):
+        def apply_delly_inv_regen(self, inputs, output_bcf, bcf_out):
             '''Apply DELLY Re-genotype'''
             bam, [bcf_merged_out] = inputs
             # input_bcf = input_bcf
@@ -522,7 +522,7 @@ class Stages(object):
                         bam=bam)
             run_stage(self.state, 'apply_delly_del_regen', delly_command)
 
-        def apply_delly_del_regen_merge(self, inputs, bcf_out):
+        def apply_delly_inv_regen_merge(self, inputs, bcf_out):
             '''Apply DELLY Re-genotype merge'''
             bcfs_args = ' '.join(inputs)
             #cores = self.get_stage_options('apply_snpeff', 'cores')
@@ -532,7 +532,7 @@ class Stages(object):
                     vcf_in=vcf_in)
             run_stage(self.state, 'apply_delly_del_regen_merge', command)
 
-        def apply_delly_del_filter(self, inputs, bcf_out):
+        def apply_delly_inv_filter(self, inputs, bcf_out):
             '''Apply DELLY germline'''
             #bcfs_args = ' '.join(inputs)
             #cores = self.get_stage_options('apply_snpeff', 'cores')

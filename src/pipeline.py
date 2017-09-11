@@ -327,6 +327,55 @@ def make_pipeline(state):
         output='delly/germline.DEL.bcf')
         .follows('apply_index_bcf_file'))
 
+    # Call INVs with DELLY
+    pipeline.transform(
+        task_func=stages.apply_delly_del_call,
+        name='apply_delly_inv_call',
+        input=output_from('merge_sample_bams'),
+        filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).merged.bam'),
+        extras=['{sample[0]}'],
+        output='delly/{sample[0]}/{sample[0]}.delly.INV.bcf')
+
+    pipeline.merge(
+        task_func=stages.apply_delly_inv_merge,
+        name='apply_delly_inv_merge',
+        input=output_from('apply_delly_inv_call'),
+        # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).delly.DEL.bcf'),
+        output='delly/delly.INV.bcf')
+
+    (pipeline.transform(
+        task_func=stages.apply_delly_inv_regen,
+        name='apply_delly_inv_regen',
+        input=output_from('merge_sample_bams'),
+        filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).merged.bam'),
+        extras=['{sample[0]}'],
+        add_inputs=add_inputs(
+            ['delly/delly.INV.bcf']),
+        output='delly/{sample[0]}/{sample[0]}.delly.INV2.bcf')
+        .follows('apply_delly_del_merge'))
+
+    pipeline.merge(
+        task_func=stages.apply_delly_inv_regen_merge,
+        name='apply_delly_inv_regen_merge',
+        input=output_from('apply_delly_inv_regen'),
+        # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).delly.DEL.bcf'),
+        output='delly/merged.INV.bcf')
+
+    pipeline.merge(
+        task_func=stages.apply_index_bcf_file,
+        name='apply_index_bcf_file',
+        input=output_from('apply_delly_inv_regen_merge'),
+        # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).delly.DEL.bcf'),
+        output='delly/merged.INV.bcf.csi')
+
+    (pipeline.merge(
+        task_func=stages.apply_delly_inv_filter,
+        name='apply_delly_inv_filter',
+        input=output_from('apply_delly_inv_regen_merge'),
+        # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).delly.DEL.bcf'),
+        output='delly/germline.INV.bcf')
+        .follows('apply_index_bcf_file'))
+
     # Call GRIDSS
     # pipeline.transform(
     #     task_func=stages.apply_gridss,
