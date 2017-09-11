@@ -352,7 +352,7 @@ def make_pipeline(state):
         add_inputs=add_inputs(
             ['delly/delly.INV.bcf']),
         output='delly/{sample[0]}/{sample[0]}.delly.INV2.bcf')
-        .follows('apply_delly_del_merge'))
+        .follows('apply_delly_inv_merge'))
 
     pipeline.merge(
         task_func=stages.apply_delly_inv_regen_merge,
