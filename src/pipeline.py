@@ -329,7 +329,7 @@ def make_pipeline(state):
 
     # Call INVs with DELLY
     pipeline.transform(
-        task_func=stages.apply_delly_del_call,
+        task_func=stages.apply_delly_inv_call,
         name='apply_delly_inv_call',
         input=output_from('merge_sample_bams'),
         filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).merged.bam'),
