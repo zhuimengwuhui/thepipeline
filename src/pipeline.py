@@ -362,8 +362,8 @@ def make_pipeline(state):
         output='delly/merged.INV.bcf')
 
     pipeline.merge(
-        task_func=stages.apply_index_bcf_file,
-        name='apply_index_bcf_file',
+        task_func=stages.apply_index_bcf_file2,
+        name='apply_index_bcf_file2',
         input=output_from('apply_delly_inv_regen_merge'),
         # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).delly.DEL.bcf'),
         output='delly/merged.INV.bcf.csi')
@@ -374,7 +374,7 @@ def make_pipeline(state):
         input=output_from('apply_delly_inv_regen_merge'),
         # filter=formatter('.+/(?P<sample>[a-zA-Z0-9]+).delly.DEL.bcf'),
         output='delly/germline.INV.bcf')
-        .follows('apply_index_bcf_file'))
+        .follows('apply_index_bcf_file2'))
 
     # Call GRIDSS
     # pipeline.transform(
