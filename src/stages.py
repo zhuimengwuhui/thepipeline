@@ -528,9 +528,9 @@ class Stages(object):
         #cores = self.get_stage_options('apply_snpeff', 'cores')
         #safe_make_dir('delly')
         #assembly = sample_id + ".merged.gridss.assembly.bam"
-        command = "bcftools merge -m id -O b -o {vcf_in} {bcfs_args}".format(bcfs_args=bcfs_args,
-                vcf_in=vcf_in)
-        run_stage(self.state, 'apply_delly_inv_regen_merge', command)
+        command = "bcftools merge -m id -O b -o {bcf_out} {bcfs_args}".format(bcfs_args=bcfs_args,
+                bcf_out=bcf_out)
+        run_stage(self.state, 'apply_delly_del_regen_merge', command)
 
     def apply_index_bcf_file2(self, inputs, bcf_out):
         '''Apply DELLY Re-genotype merge'''
