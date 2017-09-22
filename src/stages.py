@@ -38,8 +38,8 @@ def java_command_gridss(jar_path, mem_in_gb, command_args):
 	    "-Dsamjdk.use_async_io_write_tribble=true " \
 	    "-Dsamjdk.compression_level=1 " \
 	    "-cp {jar_path} gridss.CallVariants " \
-	    "TMP_DIR=. " \
-	    "WORKING_DIR=. {command_args}".format(jar_path=jar_path, mem=java_mem, command_args=command_args)
+	    "TMP_DIR=$TMPDIR " \
+	    "WORKING_DIR=$TMPDIR {command_args}".format(jar_path=jar_path, mem=java_mem, command_args=command_args)
     return command
 
 def run_java(state, stage, jar_path, mem, args):
@@ -417,7 +417,9 @@ class Stages(object):
         safe_make_dir('svariants/{sample}'.format(sample=sample_id))
         assembly = sample_id + ".gridss.assembly.bam"
         gridss_command = "REFERENCE_SEQUENCE=\"{reference}\" " \
-                "INPUT=\"{input_bam}\" OUTPUT=\"{vcf_out}\" ASSEMBLY=\"{assembly}\" " \
+                "INPUT=\"{input_bam}\" "\
+                "OUTPUT=\"{vcf_out}\" "\
+                "ASSEMBLY=\"{assembly}\" " \
 	            "BLACKLIST=\"{blacklist}\"".format(
                     reference=self.reference, input_bam=input_bam, vcf_out=vcf_out,
                     assembly=assembly,blacklist=self.blacklist)
