@@ -426,7 +426,7 @@ class Stages(object):
                 "ASSEMBLY=\"{assembly}\" " \
 	            "BLACKLIST=\"{blacklist}\"".format(
                     reference=self.reference, input_bam=input_bam, vcf_out=vcf_out,
-                    assembly=assembly,blacklist=self.blacklist)
+                    assembly=assembly,blacklist=self.blacklist, temp_dir=temp_dir)
         self.run_gridss('apply_gridss', gridss_command)
 
     ##### DELLY ###### DEL
