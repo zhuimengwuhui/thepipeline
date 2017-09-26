@@ -38,8 +38,9 @@ def java_command_gridss(jar_path, mem_in_gb, command_args):
 	    "-Dsamjdk.use_async_io_write_tribble=true " \
 	    "-Dsamjdk.compression_level=1 " \
 	    "-cp {jar_path} gridss.CallVariants " \
-	    "TMP_DIR=$TMPDIR " \
-	    "WORKING_DIR=$TMPDIR {command_args}".format(jar_path=jar_path, mem=java_mem, command_args=command_args)
+        "{command_args}".format(jar_path=jar_path, mem=java_mem, command_args=command_args)
+	    # "TMP_DIR=$TMPDIR " \
+	    # "WORKING_DIR=$TMPDIR {command_args}".format(jar_path=jar_path, mem=java_mem, command_args=command_args)
     return command
 
 def run_java(state, stage, jar_path, mem, args):
@@ -415,8 +416,11 @@ class Stages(object):
         #cores = self.get_stage_options('apply_snpeff', 'cores')
         safe_make_dir('svariants')
         safe_make_dir('svariants/{sample}'.format(sample=sample_id))
-        assembly = sample_id + ".gridss.assembly.bam"
-        gridss_command = "REFERENCE_SEQUENCE=\"{reference}\" " \
+        assembly = "svariants/" + sample_id + "/" + sample_id + ".gridss.assembly.bam"
+        temp_dir = "svariants/" + sample_id + "/"
+        gridss_command = "TMP_DIR=\"{temp_dir}\" " \
+        	    "WORKING_DIR=\"{temp_dir}\" " \
+                "REFERENCE_SEQUENCE=\"{reference}\" " \
                 "INPUT=\"{input_bam}\" "\
                 "OUTPUT=\"{vcf_out}\" "\
                 "ASSEMBLY=\"{assembly}\" " \
