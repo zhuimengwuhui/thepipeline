@@ -12,7 +12,7 @@ from runner import run_stage
 import os
 
 # PICARD_JAR = '$PICARD_HOME/lib/picard-1.69.jar'
-PICARD_JAR = '/vlsci/VR0002/kmahmood/Programs/picard/picard-tools-2.0.1/picard.jar'
+PICARD_JAR = '/usr/local/easybuild/software/picard/2.3.0/picard.jar'
 GATK_JAR = '$GATK_HOME/GenomeAnalysisTK.jar'
 
 def java_command(jar_path, mem_in_gb, command_args):
@@ -88,3 +88,13 @@ class Stages(object):
                       'MAX_RECORDS_IN_RAM=5000000 CREATE_INDEX=True'.format(
                           bam_in=bam_in, sorted_bam_out=sorted_bam_out)
         self.run_picard('sort_bam_picard', picard_args)
+
+    def mark_duplicates_picard(self, bam_in, outputs):
+        '''Mark duplicate reads using Picard'''
+        dedup_bam_out, metrics_out = outputs
+        picard_args = 'MarkDuplicates INPUT={bam_in} OUTPUT={dedup_bam_out} ' \
+                      'METRICS_FILE={metrics_out} VALIDATION_STRINGENCY=LENIENT ' \
+                      'MAX_RECORDS_IN_RAM=5000000 ASSUME_SORTED=True ' \
+                      'CREATE_INDEX=True'.format(bam_in=bam_in, dedup_bam_out=dedup_bam_out,
+                                                 metrics_out=metrics_out)
+        self.run_picard('mark_duplicates_picard', picard_args)
