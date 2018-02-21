@@ -90,3 +90,17 @@ class Stages(object):
                       'CREATE_INDEX=True'.format(bam_in=bam_in, dedup_bam_out=dedup_bam_out,
                                                  metrics_out=metrics_out)
         self.run_picard('mark_duplicates_picard', picard_args)
+
+    def realigner_target_creator(self, inputs, intervals_out):
+        '''Generate chromosome intervals using GATK'''
+        bam_in, _metrics_dup = inputs
+        cores = self.get_stage_options('chrom_intervals_gatk', 'cores')
+        gatk_args = '-T RealignerTargetCreator -R {reference} -I {bam} ' \
+                    '--num_threads {threads} ' \
+                    '--known {one_k_g_indels} ' \
+                    '--known {one_k_g_indels} ' \
+                    '-o {out}'.format(reference=self.reference, bam=bam_in,
+                                      threads=cores, 
+                                      one_k_g_indels=self.known_dog_indels,
+                                      out=intervals_out)
+        self.run_gatk('chrom_intervals_gatk', gatk_args)
