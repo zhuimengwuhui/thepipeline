@@ -9,7 +9,7 @@ setup(
     author_email='khalid.mahmood@unimelb.edu.au',
     packages=['src'],
     entry_points={
-        'console_scripts': ['thepipeline = src.main:main']
+        'console_scripts': ['dog_pipeline = src.main:main']
     },
     url='https://github.com/khalidm/thepipepine',
     license='LICENSE.txt',
