@@ -33,16 +33,8 @@ class Stages(object):
     def __init__(self, state):
         self.state = state
         self.reference = self.get_options('reference')
-        # self.dbsnp_hg19 = self.get_options('dbsnp_hg19')
-        # self.mills_hg19 = self.get_options('mills_hg19')
-        # self.one_k_g_snps = self.get_options('one_k_g_snps')
-        # self.one_k_g_indels = self.get_options('one_k_g_indels')
-        # self.one_k_g_highconf_snps = self.get_options('one_k_g_highconf_snps')
-        # self.hapmap = self.get_options('hapmap')
-        # self.interval_hg19 = self.get_options('exome_bed_hg19')
-        # self.CEU_mergeGvcf = self.get_options('CEU_mergeGvcf')
-        # self.GBR_mergeGvcf = self.get_options('GBR_mergeGvcf')
-        # self.FIN_mergeGvcf = self.get_options('FIN_mergeGvcf')
+        self.known_dog_snps = self.get_options('known_dog_snps')
+        self.known_dog_indels = self.get_options('known_dog_indels')
 
     def run_picard(self, stage, args):
         mem = int(self.state.config.get_stage_options(stage, 'mem'))
