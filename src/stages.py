@@ -32,7 +32,7 @@ def run_java(state, stage, jar_path, mem, args):
 class Stages(object):
     def __init__(self, state):
         self.state = state
-        self.reference = self.get_options('ref_hg19')
+        self.reference = self.get_options('reference')
         self.dbsnp_hg19 = self.get_options('dbsnp_hg19')
         self.mills_hg19 = self.get_options('mills_hg19')
         self.one_k_g_snps = self.get_options('one_k_g_snps')
