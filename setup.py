@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(
-    name='thepipeline',
+    name='dog_pipeline',
     version='0.1',
     author='Khalid Mahmood',
     author_email='khalid.mahmood@unimelb.edu.au',
