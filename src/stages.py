@@ -224,18 +224,18 @@ class Stages(object):
 
      def snp_recalibrate_gatk(self, genotype_vcf_in, outputs):
         '''SNP recalibration using GATK'''
-        recal_snp_out, tranches_snp_out, snp_plots_r_out = outputs
-        cores = self.get_stage_options('snp_recalibrate_gatk', 'cores')
-        gatk_args = "-T VariantRecalibrator --disable_auto_index_creation_and_locking_when_reading_rods " \
-                    "-R {reference} --minNumBadVariants 5000 --num_threads {cores} " \
-                    "-resource:omni,known=false,training=true,truth=true,prior=12.0 {one_k_g_snps} " \
-                    "-an DP -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR " \
-                    "-input {genotype_vcf} --recal_file {recal_snp} --tranches_file {tranches_snp} " \
-                    "-rscriptFile {snp_plots} -mode SNP".format(reference=self.reference,
-                                                                cores=cores, one_k_g_snps=self.known_dog_snps,
-                                                                genotype_vcf=genotype_vcf_in,
-                                                                recal_snp=recal_snp_out, tranches_snp=tranches_snp_out, snp_plots=snp_plots_r_out)
-        self.run_gatk('snp_recalibrate_gatk', gatk_args)
+         recal_snp_out, tranches_snp_out, snp_plots_r_out = outputs
+         cores = self.get_stage_options('snp_recalibrate_gatk', 'cores')
+         gatk_args = "-T VariantRecalibrator --disable_auto_index_creation_and_locking_when_reading_rods " \
+                     "-R {reference} --minNumBadVariants 5000 --num_threads {cores} " \
+                     "-resource:omni,known=false,training=true,truth=true,prior=12.0 {one_k_g_snps} " \
+                     "-an DP -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR " \
+                     "-input {genotype_vcf} --recal_file {recal_snp} --tranches_file {tranches_snp} " \
+                     "-rscriptFile {snp_plots} -mode SNP".format(reference=self.reference,
+                                                                 cores=cores, one_k_g_snps=self.known_dog_snps,
+                                                                 genotype_vcf=genotype_vcf_in,
+                                                                 recal_snp=recal_snp_out, tranches_snp=tranches_snp_out, snp_plots=snp_plots_r_out)
+         self.run_gatk('snp_recalibrate_gatk', gatk_args)
 
     def indel_recalibrate_gatk(self, genotype_vcf_in, outputs):
         '''INDEL recalibration using GATK'''
