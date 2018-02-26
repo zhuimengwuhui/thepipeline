@@ -8,4 +8,4 @@ configuration.
 
 import pkg_resources  # part of setuptools
 
-version = pkg_resources.require("thepipeline")[0].version
+version = pkg_resources.require("dog_pipeline")[0].version
