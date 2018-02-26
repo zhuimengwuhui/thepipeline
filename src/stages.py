@@ -223,7 +223,7 @@ class Stages(object):
         self.run_gatk('genotype_gvcf_gatk', gatk_args)
 
      def snp_recalibrate_gatk(self, genotype_vcf_in, outputs):
-        '''SNP recalibration using GATK'''
+         '''SNP recalibration using GATK'''
          recal_snp_out, tranches_snp_out, snp_plots_r_out = outputs
          cores = self.get_stage_options('snp_recalibrate_gatk', 'cores')
          gatk_args = "-T VariantRecalibrator --disable_auto_index_creation_and_locking_when_reading_rods " \
