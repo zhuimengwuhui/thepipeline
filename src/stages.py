@@ -126,7 +126,7 @@ class Stages(object):
         bam_in, _metrics_dup = inputs
         cores = self.get_stage_options('chrom_intervals_gatk', 'cores')
         gatk_args = '-T RealignerTargetCreator -R {reference} -I {bam} ' \
-                    '--num_threads {threads} --known {mills_hg19} ' \
+                    '--num_threads {threads} ' \
                     '--known {one_k_g_indels} ' \
                     '--known {one_k_g_indels} ' \
                     '-o {out}'.format(reference=self.reference, bam=bam_in,
