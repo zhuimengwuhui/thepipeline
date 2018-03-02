@@ -128,7 +128,6 @@ class Stages(object):
         gatk_args = '-T RealignerTargetCreator -R {reference} -I {bam} ' \
                     '--num_threads {threads} ' \
                     '--known {one_k_g_indels} ' \
-                    '--known {one_k_g_indels} ' \
                     '-o {out}'.format(reference=self.reference, bam=bam_in,
                                       threads=cores,
                                       one_k_g_indels=self.known_dog_indels,
