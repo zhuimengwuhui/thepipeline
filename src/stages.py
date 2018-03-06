@@ -186,7 +186,7 @@ class Stages(object):
 
     def call_haplotypecaller_gatk(self, bam_in, vcf_out):
         '''Call variants using GATK'''
-        # safe_make_dir('variants}'.format(sample=sample_id))
+        safe_make_dir('variants}'.format(sample=sample_id))
         gatk_args = "-T HaplotypeCaller -R {reference} --min_base_quality_score 20 " \
                     "--emitRefConfidence GVCF " \
                     "-A AlleleBalance -A AlleleBalanceBySample " \
@@ -208,7 +208,7 @@ class Stages(object):
 
     def call_haplotypecaller_gatk_nct(self, bam_in, vcf_out):
         '''Call variants using GATK'''
-        # safe_make_dir('variants}'.format(sample=sample_id))
+        #safe_make_dir('variants}'.format(sample=sample_id))
         gatk_args = "-T HaplotypeCaller -R {reference} --min_base_quality_score 20 " \
                     "--standard_min_confidence_threshold_for_calling 30.0 " \
                     "--num_cpu_threads_per_data_thread 4 " \
