@@ -259,7 +259,7 @@ class Stages(object):
                     "--num_threads {cores} --variant {vcf_in} --out {vcf_out}" \
                     .format(reference=self.reference, cores=cores, vcf_in=vcf_in, vcf_out=vcf_out)
         self.run_gatk('variant_annotator_gatk', gatk_args)
-#delete
+
     def snp_recalibrate_gatk(self, genotype_vcf_in, outputs):
         '''SNP recalibration using GATK'''
         recal_snp_out, tranches_snp_out, snp_plots_r_out = outputs
@@ -270,7 +270,7 @@ class Stages(object):
                     "-an DP -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR " \
                     "-input {genotype_vcf} --recal_file {recal_snp} --tranches_file {tranches_snp} " \
                     "-rscriptFile {snp_plots} -mode SNP".format(reference=self.reference,
-                                                                cores=cores, hapmap=self.hapmap, dbsnp=self.known_dog_snps,
+                                                                cores=cores, dbsnp=self.known_dog_snps,
                                                                 genotype_vcf=genotype_vcf_in,
                                                                 recal_snp=recal_snp_out, tranches_snp=tranches_snp_out, snp_plots=snp_plots_r_out)
         self.run_gatk('snp_recalibrate_gatk', gatk_args)
