@@ -259,7 +259,7 @@ class Stages(object):
                     "--num_threads {cores} --variant {vcf_in} --out {vcf_out}" \
                     .format(reference=self.reference, cores=cores, vcf_in=vcf_in, vcf_out=vcf_out)
         self.run_gatk('variant_annotator_gatk', gatk_args)
-
+#delete
     def snp_recalibrate_gatk(self, genotype_vcf_in, outputs):
         '''SNP recalibration using GATK'''
         recal_snp_out, tranches_snp_out, snp_plots_r_out = outputs
