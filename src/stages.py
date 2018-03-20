@@ -211,8 +211,8 @@ class Stages(object):
         g_vcf_files = ' '.join(['--variant ' + vcf for vcf in vcf_files_in])
         gatk_args = "-T CombineGVCFs -R {reference} " \
                     "--disable_auto_index_creation_and_locking_when_reading_rods " \
-                    "{g_vcf_files} -o {vcf_out}".format(reference=self.reference,
-                                                        g_vcf_files=g_vcf_files, vcf_out=vcf_out)
+                    "{g_vcf_files} -o {vcf_out} -L {interval_list}".format(reference=self.reference,
+                                                        g_vcf_files=g_vcf_files, vcf_out=vcf_out, interval_list=self.interval_dog)
         self.run_gatk('combine_gvcf_gatk', gatk_args)
 
     def genotype_gvcf_gatk(self, combined_vcf_in, vcf_out):
